@@ -633,26 +633,68 @@ ul { list-style: none; }
 /* ========================================
    SKILLS
    ======================================== */
-.skills-categories {
-  max-width: 820px;
-  margin: 0 auto;
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 24px;
 }
 
-.skill-category {
-  margin-bottom: 32px;
+.bento-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  transition: all 0.4s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+.bento-card:hover {
+  border-color: rgba(231, 76, 60, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+.bento-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at top right, rgba(231, 76, 60, 0.08), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
+}
+.bento-card:hover::before {
+  opacity: 1;
 }
 
-.skill-category-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 14px;
+.bento-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.bento-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.bento-title {
+  font-size: 1.15rem;
+  font-weight: 700;
   color: var(--text-primary);
 }
 
-.skill-pills {
+.bento-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 .skill-pill {
@@ -668,6 +710,8 @@ ul { list-style: none; }
   color: var(--text-secondary);
   transition: all 0.3s var(--ease);
   cursor: default;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .skill-pill:hover {
   background: var(--bg-card-hover);
