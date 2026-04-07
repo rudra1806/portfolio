@@ -519,6 +519,8 @@ ul {
   transition: all 0.4s var(--ease);
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .project-card::before {
@@ -550,6 +552,9 @@ ul {
   padding: 32px;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .project-name {
@@ -648,7 +653,9 @@ ul {
 
 .project-links {
   display: flex;
-  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
 }
 
 .project-links a {
@@ -916,12 +923,38 @@ ul {
   padding: 32px;
   text-align: center;
   transition: all 0.3s var(--ease);
+  overflow: hidden;
+  position: relative;
+}
+
+.achievement-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.achievement-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  opacity: 0;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(231, 76, 60, 0.06), transparent 40%);
+  transition: opacity 0.4s var(--ease);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.achievement-card:hover::before {
+  opacity: 1;
 }
 
 .achievement-card:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  border-color: rgba(231, 76, 60, 0.4);
+  transform: translateY(-6px);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(231, 76, 60, 0.08),
+    inset 0 0 60px rgba(231, 76, 60, 0.02);
 }
 
 .achievement-icon {
@@ -1084,6 +1117,29 @@ ul {
 .footer-socials a:hover {
   color: var(--accent);
   transform: translateY(-2px);
+}
+
+/* ========================================
+   CUSTOM ICONS
+   ======================================== */
+.icon-leetcode {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask: url(https://cdn.jsdelivr.net/npm/simple-icons@11.0.0/icons/leetcode.svg) no-repeat center / contain;
+  mask: url(https://cdn.jsdelivr.net/npm/simple-icons@11.0.0/icons/leetcode.svg) no-repeat center / contain;
+  vertical-align: middle;
+}
+
+.icon-codeforces {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask: url(https://cdn.jsdelivr.net/npm/simple-icons@11.0.0/icons/codeforces.svg) no-repeat center / contain;
+  mask: url(https://cdn.jsdelivr.net/npm/simple-icons@11.0.0/icons/codeforces.svg) no-repeat center / contain;
+  vertical-align: middle;
 }
 
 /* ========================================

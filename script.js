@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // PROJECT CARD MOUSE GLOW EFFECT
   // ==========================================
-  const projectCards = document.querySelectorAll('.project-card');
+  const projectCards = document.querySelectorAll('.project-card, .achievement-card');
   projectCards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
