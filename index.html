@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rudra Sanandiya — Full Stack Developer</title>
+  <meta name="description" content="Portfolio of Rudra Sanandiya — Computer Science student at Nirma University, Full Stack Developer skilled in Node.js, Express, MongoDB, React, and C++." />
+  <meta name="keywords" content="Rudra Sanandiya, Full Stack Developer, Portfolio, Node.js, Express, MongoDB, React, C++, Nirma University" />
+  <meta name="author" content="Rudra Sanandiya" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Rudra Sanandiya — Full Stack Developer" />
+  <meta property="og:description" content="Computer Science student & Full Stack Developer crafting impactful digital experiences." />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== GLOBAL PARTICLE BACKGROUND ===== -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-logo">Rudra<span class="accent">.</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+        <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+        <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
+        <li><a href="#skills" class="nav-link" data-section="skills">Skills</a></li>
+        <li><a href="#experience" class="nav-link" data-section="experience">Experience</a></li>
+        <li><a href="#achievements" class="nav-link" data-section="achievements">Achievements</a></li>
+        <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+        <li><a href="#" class="nav-link nav-resume" id="resumeBtn">Resume</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="home">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <p class="hero-greeting">Hey, I'm</p>
+      <h1 class="hero-name">RUDRA SANANDIYA</h1>
+      <div class="hero-badge">
+        <span>Full Stack Developer</span>
+      </div>
+      <p class="hero-tagline">
+        I build and craft digital experiences<br />
+        that deliver <em class="highlight-italic">real impact</em>
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">Let's Connect <i class="fa-solid fa-arrow-right"></i></a>
+        <span class="hero-email" id="heroEmail">
+          rudrasanandiyards@gmail.com
+          <button class="copy-btn" id="copyEmail" aria-label="Copy email"><i class="fa-regular fa-copy"></i></button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="section" id="about">
+    <div class="container">
+      <h2 class="section-title">About Me<span class="accent">.</span></h2>
+      <p class="section-subtitle">Get to know me better</p>
+
+      <div class="about-grid">
+        <div class="about-image-wrapper">
+          <div class="about-image-frame">
+            <img src="avatar.png" alt="Rudra Sanandiya" class="about-image" />
+          </div>
+        </div>
+        <div class="about-text">
+          <p>
+            I'm a passionate Computer Science student at <strong>Nirma University, Ahmedabad</strong> with a strong foundation in
+            full-stack web development. I specialize in building scalable applications using <strong>Node.js, Express.js, and MongoDB</strong>,
+            delivering clean code and exceptional user experiences.
+          </p>
+          <p>
+            With a keen eye for detail and a love for elegant solutions, I transform complex problems into simple, beautiful, and intuitive
+            designs. I enjoy competitive programming, having solved <strong>500+ problems</strong> on Codeforces and LeetCode.
+          </p>
+          <div class="about-stats">
+            <div class="stat-card">
+              <span class="stat-number" data-target="8.38">0</span>
+              <span class="stat-label">CGPA</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number" data-target="500" data-suffix="+">0</span>
+              <span class="stat-label">Problems Solved</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number" data-target="97.58">0</span>
+              <span class="stat-label">JEE Percentile</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon"><i class="fa-solid fa-rocket"></i></span>
+              <span class="stat-label">Building Cool Stuff</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section class="section section-alt" id="projects">
+    <div class="container">
+      <h2 class="section-title">Projects<span class="accent">.</span></h2>
+      <p class="section-subtitle">A selection of my recent work</p>
+
+      <div class="projects-grid">
+
+        <!-- Project 1: Relay -->
+        <div class="project-card project-card-featured">
+          <div class="project-card-inner">
+            <h3 class="project-name project-name-accent">
+              <a href="https://github.com/rudra1806/relay" target="_blank" rel="noopener">Relay</a>
+            </h3>
+            <p class="project-type">Zero-Knowledge E2EE Real-Time Chat Application</p>
+            <p class="project-desc">
+              A production-ready, full-stack real-time messaging platform with true zero-knowledge end-to-end encryption.
+              Messages are encrypted client-side using NaCl box (X25519 + XSalsa20-Poly1305) before transmission — the server never sees plaintext. Features BIP39 recovery phrases, contact request system, and real-time presence.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">
+                <i class="fa-solid fa-lock"></i>
+                <div>
+                  <strong>Zero-Knowledge E2EE</strong>
+                  <span>NaCl box + BIP39 recovery</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-bolt"></i>
+                <div>
+                  <strong>Real-Time</strong>
+                  <span>Socket.IO + typing indicators</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div>
+                  <strong>Arcjet Security</strong>
+                  <span>Bot detection + rate limiting</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                  <strong>Email Verification</strong>
+                  <span>OTP + password reset flow</span>
+                </div>
+              </div>
+            </div>
+            <div class="project-tags">
+              <span>React</span><span>Node.js</span><span>Express.js</span><span>MongoDB</span><span>Socket.IO</span><span>NaCl</span><span>BIP39</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/rudra1806/relay" target="_blank" rel="noopener"><i class="fa-solid fa-code"></i> Code</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: PetPooja Revenue Intelligence -->
+        <div class="project-card">
+          <div class="project-card-inner">
+            <h3 class="project-name">
+              <a href="https://github.com/rudra1806/petpooja-revenue-intelligence" target="_blank" rel="noopener">PetPooja Revenue Intelligence</a>
+            </h3>
+            <p class="project-type">AI-powered Restaurant Analytics Platform</p>
+            <p class="project-desc">
+              Full-stack platform for restaurant analytics, AI-powered ordering, and revenue optimization.
+              Features a custom analytics engine using BCG classification and association rule mining,
+              AI ordering with Meta-Llama 3, and multi-channel ordering via Twilio Voice &amp; Web Speech API.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">
+                <i class="fa-solid fa-brain"></i>
+                <div>
+                  <strong>AI Ordering</strong>
+                  <span>Meta-Llama 3 + fuzzy search</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <div>
+                  <strong>Analytics Engine</strong>
+                  <span>BCG + association mining</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-phone"></i>
+                <div>
+                  <strong>Multi-channel</strong>
+                  <span>Chat, Voice, Phone (Twilio)</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-coins"></i>
+                <div>
+                  <strong>Revenue Boost</strong>
+                  <span>Dynamic pricing + upsell</span>
+                </div>
+              </div>
+            </div>
+            <div class="project-tags">
+              <span>Node.js</span><span>Express.js</span><span>React</span><span>MongoDB</span><span>Llama 3</span><span>Twilio</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/rudra1806/petpooja-revenue-intelligence" target="_blank" rel="noopener"><i class="fa-solid fa-code"></i> Code</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: Heavenly -->
+        <div class="project-card">
+          <div class="project-card-inner">
+            <h3 class="project-name">
+              <a href="https://github.com/rudra1806/Heavenly" target="_blank" rel="noopener">Heavenly</a>
+            </h3>
+            <p class="project-type">Full-stack Property Rental Marketplace</p>
+            <p class="project-desc">
+              A full-stack web application using Node.js, Express, MongoDB with MVC architecture.
+              Features RESTful APIs, authentication with Passport.js, role-based access control,
+              geolocation search using Nominatim API &amp; GeoJSON clustering, and Cloudinary image management.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div>
+                  <strong>Secure Auth</strong>
+                  <span>Passport.js + RBAC</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <div>
+                  <strong>Geolocation</strong>
+                  <span>Nominatim + GeoJSON</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-cloud"></i>
+                <div>
+                  <strong>Cloud Storage</strong>
+                  <span>Cloudinary integration</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-lock"></i>
+                <div>
+                  <strong>XSS Protection</strong>
+                  <span>Joi + HTTP-only cookies</span>
+                </div>
+              </div>
+            </div>
+            <div class="project-tags">
+              <span>Node.js</span><span>Express.js</span><span>MongoDB</span><span>Passport.js</span><span>Cloudinary</span><span>MVC</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/rudra1806/Heavenly" target="_blank" rel="noopener"><i class="fa-solid fa-code"></i> Code</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4: DocuVault -->
+        <div class="project-card">
+          <div class="project-card-inner">
+            <h3 class="project-name">
+              <a href="https://github.com/rudra1806/DocuVault" target="_blank" rel="noopener">DocuVault</a>
+            </h3>
+            <p class="project-type">Enterprise-Grade Cloud Document Management System</p>
+            <p class="project-desc">
+              Secure cloud document management system deployed on AWS. Features drag &amp; drop uploads to S3,
+              intelligent file sharing with password-protected links, granular permissions, expiration controls,
+              and comprehensive access analytics — all behind JWT auth with full user isolation.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">
+                <i class="fa-brands fa-aws"></i>
+                <div>
+                  <strong>AWS Architecture</strong>
+                  <span>Amplify + EB + S3 + CloudFront</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-share-nodes"></i>
+                <div>
+                  <strong>Smart Sharing</strong>
+                  <span>Password-protected links</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-chart-pie"></i>
+                <div>
+                  <strong>Analytics</strong>
+                  <span>Access tracking + IP logging</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-eye"></i>
+                <div>
+                  <strong>File Preview</strong>
+                  <span>In-app viewer for 15+ formats</span>
+                </div>
+              </div>
+            </div>
+            <div class="project-tags">
+              <span>React</span><span>Node.js</span><span>Express.js</span><span>MongoDB</span><span>AWS S3</span><span>CloudFront</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/rudra1806/DocuVault" target="_blank" rel="noopener"><i class="fa-solid fa-code"></i> Code</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 5: FleetFlow -->
+        <div class="project-card">
+          <div class="project-card-inner">
+            <h3 class="project-name">
+              <a href="https://github.com/rudra1806/FleetFlow" target="_blank" rel="noopener">FleetFlow</a>
+            </h3>
+            <p class="project-type">Modular Fleet &amp; Logistics Management System</p>
+            <p class="project-desc">
+              A centralized, rule-based digital hub for delivery fleet management. Features automated vehicle/driver
+              state machines, cargo weight validation, license compliance checks, fuel efficiency analytics (km/L),
+              vehicle ROI tracking, and CSV/PDF export — all with role-based access for 4 user types.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">
+                <i class="fa-solid fa-truck"></i>
+                <div>
+                  <strong>Fleet Lifecycle</strong>
+                  <span>Automated state machine</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-user-shield"></i>
+                <div>
+                  <strong>RBAC</strong>
+                  <span>4 roles with middleware guards</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-chart-bar"></i>
+                <div>
+                  <strong>Analytics</strong>
+                  <span>ROI, cost/km, fuel efficiency</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-weight-scale"></i>
+                <div>
+                  <strong>Validation</strong>
+                  <span>Cargo weight + license expiry</span>
+                </div>
+              </div>
+            </div>
+            <div class="project-tags">
+              <span>React</span><span>Node.js</span><span>Express.js</span><span>MongoDB</span><span>Recharts</span><span>JWT</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/rudra1806/FleetFlow" target="_blank" rel="noopener"><i class="fa-solid fa-code"></i> Code</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 6: Diffie-Hellman Key Exchange -->
+        <div class="project-card">
+          <div class="project-card-inner">
+            <h3 class="project-name">
+              <a href="https://github.com/rudra1806/Diffie-Hellman-Cpp" target="_blank" rel="noopener">Diffie-Hellman Key Exchange</a>
+            </h3>
+            <p class="project-type">Cryptographic Protocol Simulation in C++</p>
+            <p class="project-desc">
+              A modular C++ implementation of the Diffie-Hellman key exchange protocol. Simulates how two parties
+              establish a shared secret over an insecure channel without revealing private keys. Features manual modular
+              exponentiation, clean header/source separation, and cross-platform CMake build support.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">
+                <i class="fa-solid fa-key"></i>
+                <div>
+                  <strong>Key Exchange</strong>
+                  <span>Discrete logarithm problem</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-calculator"></i>
+                <div>
+                  <strong>Math Engine</strong>
+                  <span>Manual modular exponentiation</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-gears"></i>
+                <div>
+                  <strong>Build System</strong>
+                  <span>CMake cross-platform</span>
+                </div>
+              </div>
+              <div class="highlight-item">
+                <i class="fa-solid fa-folder-tree"></i>
+                <div>
+                  <strong>Clean Architecture</strong>
+                  <span>Header/source separation</span>
+                </div>
+              </div>
+            </div>
+            <div class="project-tags">
+              <span>C++</span><span>CMake</span><span>Cryptography</span><span>Modular Arithmetic</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/rudra1806/Diffie-Hellman-Cpp" target="_blank" rel="noopener"><i class="fa-solid fa-code"></i> Code</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS ===== -->
+  <section class="section" id="skills">
+    <div class="container">
+      <h2 class="section-title">Skills & Expertise<span class="accent">.</span></h2>
+      <p class="section-subtitle">A collection of technologies I'm proficient with</p>
+
+      <div class="skills-categories">
+
+        <div class="skill-category">
+          <h3 class="skill-category-title">Languages</h3>
+          <div class="skill-pills">
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="18" height="18" /> JavaScript</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" width="18" height="18" /> C++</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="18" height="18" /> Python</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" width="18" height="18" /> Java</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-category-title">Web Development</h3>
+          <div class="skill-pills">
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="18" height="18" /> HTML5</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="18" height="18" /> CSS3</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js" width="18" height="18" /> Node.js</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express.js" width="18" height="18" style="filter:invert(1)" /> Express.js</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" width="18" height="18" /> React</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-category-title">Backend & Architecture</h3>
+          <div class="skill-pills">
+            <span class="skill-pill"><i class="fa-solid fa-server" style="color:#61DAFB"></i> REST APIs</span>
+            <span class="skill-pill"><i class="fa-solid fa-layer-group" style="color:#A259FF"></i> MVC Architecture</span>
+            <span class="skill-pill"><i class="fa-solid fa-key" style="color:#F7DF1E"></i> Authentication</span>
+            <span class="skill-pill"><i class="fa-solid fa-user-shield" style="color:#4FC08D"></i> RBAC</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-category-title">Databases</h3>
+          <div class="skill-pills">
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" alt="MongoDB" width="18" height="18" /> MongoDB</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL" width="18" height="18" /> MySQL</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-category-title">Core Concepts</h3>
+          <div class="skill-pills">
+            <span class="skill-pill"><i class="fa-solid fa-diagram-project" style="color:#FF6B6B"></i> Data Structures</span>
+            <span class="skill-pill"><i class="fa-solid fa-code" style="color:#61DAFB"></i> Algorithms</span>
+            <span class="skill-pill"><i class="fa-solid fa-cubes" style="color:#A259FF"></i> OOP</span>
+            <span class="skill-pill"><i class="fa-solid fa-database" style="color:#4FC08D"></i> DBMS</span>
+            <span class="skill-pill"><i class="fa-solid fa-microchip" style="color:#F7DF1E"></i> Operating Systems</span>
+            <span class="skill-pill"><i class="fa-solid fa-network-wired" style="color:#FF9A56"></i> Computer Networks</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <h3 class="skill-category-title">Tools & Platforms</h3>
+          <div class="skill-pills">
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git" width="18" height="18" /> Git</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" width="18" height="18" style="filter:invert(1)" /> GitHub</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux" width="18" height="18" /> Linux</span>
+            <span class="skill-pill"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" alt="Postman" width="18" height="18" /> Postman</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EXPERIENCE ===== -->
+  <section class="section section-alt" id="experience">
+    <div class="container">
+      <h2 class="section-title">Experience<span class="accent">.</span></h2>
+      <p class="section-subtitle">My professional journey</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-header">
+              <div>
+                <h3 class="timeline-role">Teaching Volunteer – Computer Science</h3>
+                <p class="timeline-company">Civic & Social Service Internship (CSSI) <i class="fa-solid fa-arrow-up-right-from-square"></i></p>
+                <p class="timeline-location"><i class="fa-solid fa-location-dot"></i> Paneli, Gujarat</p>
+              </div>
+              <span class="timeline-date">June 2024 – July 2024</span>
+            </div>
+            <ul class="timeline-bullets">
+              <li>Delivered sessions on <strong>computer fundamentals</strong> and <strong>programming concepts</strong> to <strong>20+ students</strong>.</li>
+              <li>Improved <strong>student engagement and understanding</strong> through real-world examples and structured teaching.</li>
+              <li>Demonstrated <strong>technical communication</strong>, <strong>team collaboration</strong>, and <strong>leadership</strong>.</li>
+            </ul>
+            <div class="project-tags">
+              <span>Teaching</span><span>Computer Science</span><span>Leadership</span><span>Communication</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Education Timeline Items -->
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-header">
+              <div>
+                <h3 class="timeline-role">B.Tech in Computer Science & Engineering</h3>
+                <p class="timeline-company">Nirma University</p>
+                <p class="timeline-location"><i class="fa-solid fa-location-dot"></i> Ahmedabad, Gujarat</p>
+              </div>
+              <span class="timeline-date">2023 – 2027 (Expected)</span>
+            </div>
+            <ul class="timeline-bullets">
+              <li>Current CGPA: <strong>8.38</strong></li>
+              <li><strong>Coursework:</strong> Data Structures & Algorithms, Operating Systems, DBMS, OOP, Computer Networks</li>
+            </ul>
+            <div class="project-tags">
+              <span>B.Tech CSE</span><span>CGPA 8.38</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-header">
+              <div>
+                <h3 class="timeline-role">Class XII (PCM)</h3>
+                <p class="timeline-company">Krishna International School</p>
+                <p class="timeline-location"><i class="fa-solid fa-location-dot"></i> Rajkot, Gujarat</p>
+              </div>
+              <span class="timeline-date">May 2023</span>
+            </div>
+            <ul class="timeline-bullets">
+              <li>Board Score: <strong>90%</strong></li>
+              <li>JEE Main: <strong>97.58 Percentile</strong></li>
+            </ul>
+            <div class="project-tags">
+              <span>PCM</span><span>90%</span><span>JEE 97.58%ile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ACHIEVEMENTS ===== -->
+  <section class="section" id="achievements">
+    <div class="container">
+      <h2 class="section-title">Achievements<span class="accent">.</span></h2>
+      <p class="section-subtitle">Milestones & recognitions</p>
+
+      <div class="achievements-grid">
+        <div class="achievement-card">
+          <div class="achievement-icon"><i class="fa-solid fa-trophy"></i></div>
+          <h3>Tata Imagination Challenge 2025</h3>
+          <span class="achievement-badge">Semi-Finalist</span>
+          <p>
+            Proposed <strong>CitizenConnect</strong>, a civic-tech solution for photo-based public issue reporting with
+            GPS tagging, transparent status tracking, automated escalation, and department credibility scoring
+            to enhance urban governance.
+          </p>
+        </div>
+        <div class="achievement-card">
+          <div class="achievement-icon"><i class="fa-solid fa-medal"></i></div>
+          <h3>HACKaMINeD Hackathon</h3>
+          <span class="achievement-badge">Top 5 – PetPooja Track</span>
+          <p>
+            Achieved <strong>Top 5 rank among 400+ teams</strong> (2300+ registrations) as part of team <strong>Delta Force</strong>,
+            building a real-world solution under time constraints showcasing problem-solving, system design, and teamwork.
+          </p>
+        </div>
+        <div class="achievement-card">
+          <div class="achievement-icon"><i class="fa-solid fa-code"></i></div>
+          <h3>Competitive Programming</h3>
+          <span class="achievement-badge">500+ Problems</span>
+          <p>
+            <strong>Pupil</strong> on Codeforces with <strong>500+</strong> problems solved on Codeforces and LeetCode,
+            strengthening foundations in algorithms, data structures, and edge-case reasoning.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="section section-alt" id="contact">
+    <div class="container">
+      <h2 class="section-title">Get In Touch<span class="accent">.</span></h2>
+      <p class="section-subtitle">Let's build something great together</p>
+
+      <div class="contact-content">
+        <div class="contact-info">
+          <p class="contact-text">
+            I'm currently looking for internship opportunities and am open to collaborating on interesting projects.
+            Whether you have a question, a project idea, or just want to say hi — feel free to reach out!
+          </p>
+          <div class="contact-links">
+            <a href="mailto:rudrasanandiyards@gmail.com" class="contact-link-item">
+              <i class="fa-solid fa-envelope"></i>
+              <span>rudrasanandiyards@gmail.com</span>
+            </a>
+            <a href="tel:+919664995616" class="contact-link-item">
+              <i class="fa-solid fa-phone"></i>
+              <span>+91 9664995616</span>
+            </a>
+            <a href="https://www.linkedin.com/in/rudra-sanandiya-71b098304/" target="_blank" rel="noopener" class="contact-link-item">
+              <i class="fa-brands fa-linkedin"></i>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/rudra1806" target="_blank" rel="noopener" class="contact-link-item">
+              <i class="fa-brands fa-github"></i>
+              <span>GitHub</span>
+            </a>
+            <a href="https://leetcode.com/u/rudra0018/" target="_blank" rel="noopener" class="contact-link-item">
+              <i class="fa-solid fa-code"></i>
+              <span>LeetCode</span>
+            </a>
+            <a href="https://codeforces.com/profile/Psyko.R" target="_blank" rel="noopener" class="contact-link-item">
+              <i class="fa-solid fa-terminal"></i>
+              <span>Codeforces</span>
+            </a>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="formName">Name</label>
+            <input type="text" id="formName" name="name" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label for="formEmail">Email</label>
+            <input type="email" id="formEmail" name="email" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="formMessage">Message</label>
+            <textarea id="formMessage" name="message" rows="5" placeholder="Your message..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Send Message <i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2025 Rudra Sanandiya. Built with passion.</p>
+      <div class="footer-socials">
+        <a href="https://github.com/rudra1806" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/rudra-sanandiya-71b098304/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://leetcode.com/u/rudra0018/" target="_blank" rel="noopener" aria-label="LeetCode"><i class="fa-solid fa-code"></i></a>
+        <a href="https://codeforces.com/profile/Psyko.R" target="_blank" rel="noopener" aria-label="Codeforces"><i class="fa-solid fa-terminal"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <script src="script.js"></script>
+</body>
+</html>
