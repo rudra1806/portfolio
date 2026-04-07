@@ -77,13 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.getElementById('navLinks');
   const allNavLinks = document.querySelectorAll('.nav-link[data-section]');
 
-  // Scroll class
-  let lastScroll = 0;
-  window.addEventListener('scroll', () => {
-    const st = window.scrollY;
-    navbar.classList.toggle('scrolled', st > 50);
-    lastScroll = st;
-  });
+  // Scroll class tracking removed as per request to keep navbar static
 
   // Mobile menu
   hamburger.addEventListener('click', () => {
