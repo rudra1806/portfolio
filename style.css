@@ -45,7 +45,6 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 100px;
 }
 
 body {
@@ -1024,6 +1023,7 @@ body.modal-open {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1041,10 +1041,21 @@ body.modal-open {
   gap: 20px;
 }
 
-.bento-col-4 { grid-column: span 4; }
-.bento-col-7 { grid-column: span 7; }
-.bento-col-5 { grid-column: span 5; }
-.bento-col-8 { grid-column: span 8; }
+.bento-col-4 {
+  grid-column: span 4;
+}
+
+.bento-col-7 {
+  grid-column: span 7;
+}
+
+.bento-col-5 {
+  grid-column: span 5;
+}
+
+.bento-col-8 {
+  grid-column: span 8;
+}
 
 .bento-card {
   background: var(--bg-card);
@@ -1057,7 +1068,7 @@ body.modal-open {
   z-index: 1;
 }
 
-.bento-card > * {
+.bento-card>* {
   position: relative;
   z-index: 2;
 }
@@ -1065,7 +1076,7 @@ body.modal-open {
 .bento-card:hover {
   border-color: rgba(231, 76, 60, 0.4);
   transform: translateY(-4px);
-  box-shadow: 
+  box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.4),
     inset 0 0 30px rgba(231, 76, 60, 0.03);
 }
@@ -1294,7 +1305,7 @@ body.modal-open {
   position: relative;
 }
 
-.achievement-card > * {
+.achievement-card>* {
   position: relative;
   z-index: 1;
 }
