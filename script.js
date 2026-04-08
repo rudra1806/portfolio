@@ -183,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const revealElements = [
     ...document.querySelectorAll('.about-grid'),
     ...document.querySelectorAll('.project-card'),
+    ...document.querySelectorAll('.bento-card'),
     ...document.querySelectorAll('.skill-category'),
     ...document.querySelectorAll('.timeline-item'),
     ...document.querySelectorAll('.achievement-card'),
@@ -241,8 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   // PROJECT CARD MOUSE GLOW EFFECT
   // ==========================================
-  const projectCards = document.querySelectorAll('.project-card, .achievement-card');
-  projectCards.forEach(card => {
+  const glowCards = document.querySelectorAll('.project-card, .achievement-card, .bento-card');
+  glowCards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -250,6 +251,111 @@ document.addEventListener('DOMContentLoaded', () => {
       card.style.setProperty('--mouse-x', `${x}px`);
       card.style.setProperty('--mouse-y', `${y}px`);
     });
+  });
+
+  // ==========================================
+  // PROJECT DETAIL MODAL
+  // ==========================================
+  const modalOverlay = document.getElementById('projectModal');
+  const modalContent = document.getElementById('projectModalContent');
+  const modalCloseBtn = document.getElementById('projectModalClose');
+
+  function openProjectModal(card) {
+    // Read data from the card
+    const nameEl = card.querySelector('.project-name a');
+    const name = nameEl ? nameEl.textContent.trim() : '';
+    const isAccent = card.querySelector('.project-name-accent') !== null;
+    const type = card.querySelector('.project-type')?.textContent || '';
+    const desc = card.querySelector('.project-details .project-desc')?.innerHTML || '';
+    const highlightsEl = card.querySelectorAll('.project-details .highlight-item');
+    const tagsEl = card.querySelectorAll('.project-brief .project-tags span');
+    const linksEl = card.querySelectorAll('.project-brief .project-links a');
+
+    // Build highlights HTML
+    let highlightsHTML = '';
+    highlightsEl.forEach(item => {
+      const icon = item.querySelector('i')?.outerHTML || '';
+      const strong = item.querySelector('strong')?.textContent || '';
+      const span = item.querySelector('span')?.textContent || '';
+      highlightsHTML += `
+        <div class="modal-highlight-item">
+          ${icon}
+          <div>
+            <strong>${strong}</strong>
+            <span>${span}</span>
+          </div>
+        </div>`;
+    });
+
+    // Build tags HTML
+    let tagsHTML = '';
+    tagsEl.forEach(tag => {
+      tagsHTML += `<span>${tag.textContent}</span>`;
+    });
+
+    // Build action links HTML
+    let actionsHTML = '';
+    linksEl.forEach(link => {
+      const href = link.getAttribute('href');
+      const text = link.textContent.trim();
+      const isLive = text.toLowerCase().includes('live');
+      actionsHTML += `<a href="${href}" target="_blank" rel="noopener" class="modal-action-btn ${isLive ? 'btn-live' : 'btn-code'}">
+        ${link.querySelector('i')?.outerHTML || ''} ${text}
+      </a>`;
+    });
+
+    // Build modal content
+    modalContent.innerHTML = `
+      <div class="modal-header">
+        <h3 class="modal-name ${isAccent ? 'modal-name-accent' : ''}">${name}</h3>
+        <p class="modal-type">${type}</p>
+      </div>
+      <div class="modal-divider"></div>
+      <p class="modal-desc">${desc}</p>
+      ${highlightsHTML ? `
+        <p class="modal-highlights-title">Key Features</p>
+        <div class="modal-highlights">${highlightsHTML}</div>
+      ` : ''}
+      <div class="modal-tags">${tagsHTML}</div>
+      <div class="modal-actions">${actionsHTML}</div>
+    `;
+
+    // Show the modal
+    modalOverlay.classList.add('active');
+    document.body.classList.add('modal-open');
+    // Ensure modal starts scrolled to top
+    modalOverlay.querySelector('.project-modal').scrollTop = 0;
+  }
+
+  function closeProjectModal() {
+    modalOverlay.classList.remove('active');
+    document.body.classList.remove('modal-open');
+  }
+
+  // Attach to all "View Details" buttons
+  const expandBtns = document.querySelectorAll('.project-expand-btn');
+  expandBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const targetId = btn.getAttribute('data-target');
+      const card = document.getElementById(targetId);
+      if (card) openProjectModal(card);
+    });
+  });
+
+  // Close on X button
+  modalCloseBtn.addEventListener('click', closeProjectModal);
+
+  // Close on backdrop click
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeProjectModal();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+      closeProjectModal();
+    }
   });
 
 });
