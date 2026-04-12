@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.currentOpacity = this.opacity + Math.sin(this.pulsePhase) * 0.15;
 
       if (this.x < -10 || this.x > canvas.width + 10 ||
-          this.y < -10 || this.y > canvas.height + 10) {
+        this.y < -10 || this.y > canvas.height + 10) {
         this.reset();
       }
     }
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const copyBtn = document.getElementById('copyEmail');
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText('rudrasanandiyards@gmail.com').then(() => {
+      navigator.clipboard.writeText('rudrapatelrds09@gmail.com').then(() => {
         const icon = copyBtn.querySelector('i');
         icon.className = 'fa-solid fa-check';
         copyBtn.style.color = '#4ade80';
@@ -132,14 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // RESUME BUTTON (download / scroll to contact)
+  // RESUME BUTTON
   // ==========================================
   const resumeBtn = document.getElementById('resumeBtn');
   if (resumeBtn) {
     resumeBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      // If a resume PDF exists, this would link to it. For now, scroll to contact.
-      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+      window.open('https://drive.google.com/file/d/1AX0bWETN3RqAu33STVEj-p5m8__5mokd/view?usp=sharing', '_blank');
     });
   }
 
@@ -222,19 +221,48 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = contactForm.querySelector('button[type="submit"]');
       const originalHTML = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-check"></i> Message Sent!';
-      btn.style.background = '#059669';
+
+      // Validate hCaptcha
+      const hCaptchaField = contactForm.querySelector('textarea[name=h-captcha-response]');
+      if (hCaptchaField && !hCaptchaField.value) {
+        alert('Please complete the captcha before sending.');
+        return;
+      }
+
+      // Show loading state
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
       btn.disabled = true;
+
+      try {
+        const formData = new FormData(contactForm);
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Message Sent!';
+          btn.style.background = '#059669';
+          contactForm.reset();
+        } else {
+          btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Failed — Try Again';
+          btn.style.background = '#dc2626';
+        }
+      } catch (error) {
+        btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Error — Try Again';
+        btn.style.background = '#dc2626';
+      }
 
       setTimeout(() => {
         btn.innerHTML = originalHTML;
         btn.style.background = '';
         btn.disabled = false;
-        contactForm.reset();
       }, 3000);
     });
   }

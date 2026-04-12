@@ -1509,6 +1509,12 @@ body.modal-open {
   color: var(--text-muted);
 }
 
+/* hCaptcha widget */
+.h-captcha {
+  display: flex;
+  justify-content: center;
+}
+
 /* ========================================
    FOOTER
    ======================================== */

@@ -72,7 +72,7 @@
       <div class="hero-actions">
         <a href="#contact" class="btn btn-primary">Let's Connect <i class="fa-solid fa-arrow-right"></i></a>
         <span class="hero-email" id="heroEmail">
-          rudrasanandiyards@gmail.com
+          rudrapatelrds09@gmail.com
           <button class="copy-btn" id="copyEmail" aria-label="Copy email"><i class="fa-regular fa-copy"></i></button>
         </span>
       </div>
@@ -712,9 +712,11 @@
             </div>
             <ul class="timeline-bullets">
               <li>Taught <strong>computer fundamentals</strong> to <strong>20+ students</strong> across
-                <strong>4-week</strong> structured sessions.</li>
+                <strong>4-week</strong> structured sessions.
+              </li>
               <li>Coordinated <strong>daily student assemblies</strong> and administrative tasks for a campus of
-                <strong>300+ students</strong>.</li>
+                <strong>300+ students</strong>.
+              </li>
               <li>Collaborated with <strong>5+ faculty members</strong> to support academic and extracurricular
                 operations.</li>
               <li>Developed <strong>communication, leadership, and teamwork</strong> skills in a structured community
@@ -856,13 +858,9 @@
             Whether you have a question, a project idea, or just want to say hi — feel free to reach out!
           </p>
           <div class="contact-links">
-            <a href="mailto:rudrasanandiyards@gmail.com" class="contact-link-item">
+            <a href="mailto:rudrapatelrds09@gmail.com" class="contact-link-item">
               <i class="fa-solid fa-envelope"></i>
-              <span>rudrasanandiyards@gmail.com</span>
-            </a>
-            <a href="tel:+919664995616" class="contact-link-item">
-              <i class="fa-solid fa-phone"></i>
-              <span>+91 9664995616</span>
+              <span>rudrapatelrds09@gmail.com</span>
             </a>
             <a href="https://www.linkedin.com/in/rudra-sanandiya-71b098304/" target="_blank" rel="noopener"
               class="contact-link-item">
@@ -888,7 +886,16 @@
           </div>
         </div>
 
-        <form class="contact-form" id="contactForm">
+        <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+          <!-- Web3Forms Access Key — delivers submissions to rudrapatelrds09@gmail.com
+ -->
+          <input type="hidden" name="access_key" value="ac8c4fc0-e206-4305-83f7-6670f0e69025" />
+          <!-- Honeypot anti-spam -->
+          <input type="checkbox" name="botcheck" class="hidden" style="display:none" />
+          <!-- Subject line for the email -->
+          <input type="hidden" name="subject" value="New message from Portfolio Contact Form" />
+          <!-- Send a copy to yourself -->
+          <input type="hidden" name="from_name" value="Portfolio Contact Form" />
           <div class="form-group">
             <label for="formName">Name</label>
             <input type="text" id="formName" name="name" placeholder="Your name" required />
@@ -901,7 +908,9 @@
             <label for="formMessage">Message</label>
             <textarea id="formMessage" name="message" rows="5" placeholder="Your message..." required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-full">Send Message <i
+          <!-- hCaptcha spam protection -->
+          <div class="h-captcha" data-captcha="true" data-theme="dark"></div>
+          <button type="submit" class="btn btn-primary btn-full" id="contactSubmitBtn">Send Message <i
               class="fa-solid fa-paper-plane"></i></button>
         </form>
       </div>
@@ -942,6 +951,8 @@
   <!-- Back to top -->
   <button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
+  <!-- Web3Forms hCaptcha Script -->
+  <script src="https://web3forms.com/client/script.js" async defer></script>
   <script src="script.js"></script>
 </body>
 
