@@ -333,6 +333,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Build modal content
+    // Also read extra sections (architecture, tech badges, deployment, features)
+    const extraSections = card.querySelectorAll('.project-details .project-extra-section');
+    let extraHTML = '';
+    extraSections.forEach(section => {
+      const title = section.getAttribute('data-extra-title') || '';
+      extraHTML += `
+        <div class="modal-extra-section">
+          <div class="modal-divider"></div>
+          <p class="modal-extra-title">${title}</p>
+          ${section.innerHTML}
+        </div>`;
+    });
+
     modalContent.innerHTML = `
       <div class="modal-header">
         <h3 class="modal-name ${isAccent ? 'modal-name-accent' : ''}">${name}</h3>
@@ -344,6 +357,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="modal-highlights-title">Key Features</p>
         <div class="modal-highlights">${highlightsHTML}</div>
       ` : ''}
+      ${extraHTML}
+      <div class="modal-divider"></div>
       <div class="modal-tags">${tagsHTML}</div>
       <div class="modal-actions">${actionsHTML}</div>
     `;

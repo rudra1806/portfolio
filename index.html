@@ -208,7 +208,300 @@
           </div>
         </div>
 
-        <!-- Project 2: PetPooja Revenue Intelligence -->
+        <!-- Project 2: DocuVault -->
+        <div class="project-card project-card-featured" id="project-docuvault">
+          <div class="project-card-inner">
+            <div class="project-brief">
+              <h3 class="project-name project-name-accent">
+                <a href="https://github.com/rudra1806/docuvault" target="_blank" rel="noopener">DocuVault</a>
+              </h3>
+              <p class="project-type">Cloud Document Management System with AI-Powered RAG</p>
+              <p class="project-tagline">AWS-powered document vault with drag &amp; drop uploads, smart sharing,
+                real-time analytics, and an <em>AI Document Q&amp;A system</em> using Retrieval-Augmented Generation
+                — powered by Groq's Llama 3.3 70B.</p>
+              <div class="project-tags">
+                <span>React</span><span>Node.js</span><span>FastAPI</span><span>MongoDB</span><span>Groq
+                  AI</span><span>Qdrant</span><span>AWS</span><span>HuggingFace</span>
+              </div>
+              <div class="project-brief-footer">
+                <div class="project-links">
+                  <a href="https://github.com/rudra1806/docuvault" target="_blank" rel="noopener"><i
+                      class="fa-brands fa-github"></i> Code</a>
+                  <a href="https://docuvault.iamrudra.tech" target="_blank" rel="noopener"><i
+                      class="fa-solid fa-arrow-up-right-from-square"></i> Live</a>
+                </div>
+                <button class="project-expand-btn" aria-label="Toggle project details" data-target="project-docuvault">
+                  <span class="expand-text">View Details</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
+              </div>
+            </div>
+            <div class="project-details">
+              <div class="project-details-inner">
+                <div class="project-details-divider"></div>
+                <p class="project-desc">
+                  AWS-powered document vault with drag &amp; drop uploads, smart sharing via password-protected links,
+                  real-time access analytics, and an AI document Q&amp;A system using Retrieval-Augmented Generation
+                  (RAG).
+                  Ask natural language questions about your documents and get cited answers powered by Groq's Llama 3.3
+                  70B LLM.
+                </p>
+                <div class="project-highlights">
+                  <div class="highlight-item">
+                    <i class="fa-solid fa-robot"></i>
+                    <div>
+                      <strong>AI Document Q&A (RAG)</strong>
+                      <span>HuggingFace BGE-M3 embeddings, Qdrant vector search, Groq Llama 3.3 70B with source
+                        citations</span>
+                    </div>
+                  </div>
+                  <div class="highlight-item">
+                    <i class="fa-brands fa-aws"></i>
+                    <div>
+                      <strong>AWS Production Architecture</strong>
+                      <span>Amplify + Elastic Beanstalk + EC2 (c7i-flex.large) + CloudFront CDN + S3 + CloudWatch</span>
+                    </div>
+                  </div>
+                  <div class="highlight-item">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    <div>
+                      <strong>Smart Sharing</strong>
+                      <span>Password-protected links with granular permissions, expiration controls, and access
+                        analytics</span>
+                    </div>
+                  </div>
+                  <div class="highlight-item">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <div>
+                      <strong>Multi-Format Support</strong>
+                      <span>In-app preview for 18+ formats with intelligent AI processing pipelines per file type</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Architecture Diagram -->
+                <div class="project-extra-section" data-extra-title="Microservices Architecture">
+                  <div class="architecture-diagram">
+                    <!-- Tier 1: End Users -->
+                    <div class="arch-row">
+                      <div class="arch-node arch-node-user">
+                        <i class="fa-solid fa-users"></i>
+                        <span>End Users</span>
+                      </div>
+                    </div>
+                    <div class="arch-connector"><span class="arch-label">HTTPS</span><i
+                        class="fa-solid fa-arrow-down"></i></div>
+
+                    <!-- Tier 2: AWS Amplify -->
+                    <div class="arch-row">
+                      <div class="arch-node arch-node-frontend">
+                        <i class="fa-brands fa-react"></i>
+                        <span>AWS Amplify</span>
+                        <small>React Frontend</small>
+                        <small>Auto-deploy on Git</small>
+                      </div>
+                    </div>
+                    <div class="arch-connector"><span class="arch-label">HTTPS</span><i
+                        class="fa-solid fa-arrow-down"></i></div>
+
+                    <!-- Tier 3: CloudFront -->
+                    <div class="arch-row">
+                      <div class="arch-node arch-node-cdn">
+                        <i class="fa-solid fa-globe"></i>
+                        <span>AWS CloudFront</span>
+                        <small>CDN + HTTPS Proxy</small>
+                        <small>Solves Mixed Content</small>
+                      </div>
+                    </div>
+                    <div class="arch-connector"><span class="arch-label">HTTPS → HTTP</span><i
+                        class="fa-solid fa-arrow-down"></i></div>
+
+                    <!-- Tier 4: Elastic Beanstalk -->
+                    <div class="arch-row">
+                      <div class="arch-node arch-node-backend">
+                        <i class="fa-brands fa-node-js"></i>
+                        <span>AWS Elastic Beanstalk</span>
+                        <small>Node.js Backend</small>
+                        <small>t3.micro</small>
+                      </div>
+                    </div>
+                    <div class="arch-connector"><i class="fa-solid fa-arrow-down"></i></div>
+
+                    <!-- Tier 5: Backend Services -->
+                    <div class="arch-row arch-row-split">
+                      <div class="arch-node arch-node-db">
+                        <i class="fa-solid fa-database"></i>
+                        <span>MongoDB Atlas</span>
+                        <small>M0</small>
+                      </div>
+                      <div class="arch-node arch-node-storage">
+                        <i class="fa-brands fa-aws"></i>
+                        <span>AWS S3</span>
+                        <small>Files · 20GB</small>
+                      </div>
+                      <div class="arch-node arch-node-logs">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>CloudWatch</span>
+                        <small>Logs · JSON</small>
+                      </div>
+                      <div class="arch-node arch-node-ai">
+                        <i class="fa-solid fa-brain"></i>
+                        <span>AWS EC2</span>
+                        <small>AI Service</small>
+                        <small>c7i-flex.large</small>
+                      </div>
+                    </div>
+                    <div class="arch-connector arch-connector-offset"><span class="arch-label">HTTP</span><i
+                        class="fa-solid fa-arrow-down"></i></div>
+
+                    <!-- Tier 6: AI External Services -->
+                    <div class="arch-row arch-row-split arch-row-ai">
+                      <div class="arch-node arch-node-vector">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Qdrant Cloud</span>
+                        <small>Vectors</small>
+                      </div>
+                      <div class="arch-node arch-node-embed">
+                        <i class="fa-solid fa-cube"></i>
+                        <span>HuggingFace</span>
+                        <small>Embed</small>
+                      </div>
+                      <div class="arch-node arch-node-llm">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Groq</span>
+                        <small>LLM</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tech Stack Badges -->
+                <div class="project-extra-section" data-extra-title="Tech Stack">
+                  <div class="project-tech-badges">
+                    <div class="tech-badge-group">
+                      <span class="tech-badge-label">Frontend</span>
+                      <div class="tech-badges">
+                        <span class="tech-badge tech-badge-react">React</span>
+                        <span class="tech-badge tech-badge-vite">Vite</span>
+                        <span class="tech-badge tech-badge-tailwind">Tailwind CSS</span>
+                      </div>
+                    </div>
+                    <div class="tech-badge-group">
+                      <span class="tech-badge-label">Backend</span>
+                      <div class="tech-badges">
+                        <span class="tech-badge tech-badge-node">Node.js</span>
+                        <span class="tech-badge tech-badge-express">Express.js</span>
+                        <span class="tech-badge tech-badge-mongo">MongoDB Atlas</span>
+                      </div>
+                    </div>
+                    <div class="tech-badge-group">
+                      <span class="tech-badge-label">AI Microservice</span>
+                      <div class="tech-badges">
+                        <span class="tech-badge tech-badge-fastapi">FastAPI</span>
+                        <span class="tech-badge tech-badge-python">Python</span>
+                        <span class="tech-badge tech-badge-groq">Groq AI</span>
+                        <span class="tech-badge tech-badge-hf">HuggingFace</span>
+                        <span class="tech-badge tech-badge-qdrant">Qdrant</span>
+                      </div>
+                    </div>
+                    <div class="tech-badge-group">
+                      <span class="tech-badge-label">Cloud Infrastructure</span>
+                      <div class="tech-badges">
+                        <span class="tech-badge tech-badge-aws">AWS Amplify</span>
+                        <span class="tech-badge tech-badge-aws">Elastic Beanstalk</span>
+                        <span class="tech-badge tech-badge-aws">EC2</span>
+                        <span class="tech-badge tech-badge-aws">S3</span>
+                        <span class="tech-badge tech-badge-aws">CloudFront</span>
+                        <span class="tech-badge tech-badge-aws">CloudWatch</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Additional Features -->
+                <div class="project-extra-section" data-extra-title="Additional Features">
+                  <ul class="project-features-list">
+                    <li><i class="fa-solid fa-check"></i> JWT authentication with bcrypt encryption</li>
+                    <li><i class="fa-solid fa-check"></i> Real-time AI processing status tracking</li>
+                    <li><i class="fa-solid fa-check"></i> Drag &amp; drop file uploads to S3</li>
+                    <li><i class="fa-solid fa-check"></i> Chat interface with markdown rendering</li>
+                    <li><i class="fa-solid fa-check"></i> Vector similarity search with user isolation</li>
+                    <li><i class="fa-solid fa-check"></i> Automatic document chunking and embedding</li>
+                    <li><i class="fa-solid fa-check"></i> Access analytics dashboard</li>
+                    <li><i class="fa-solid fa-check"></i> XSS protection and input sanitization</li>
+                    <li><i class="fa-solid fa-check"></i> Cascade deletion for share links</li>
+                    <li><i class="fa-solid fa-check"></i> Mobile-responsive glassmorphism UI</li>
+                  </ul>
+                </div>
+
+                <!-- Deployment -->
+                <div class="project-extra-section" data-extra-title="Deployment">
+                  <div class="deployment-grid">
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-desktop"></i>
+                      <div>
+                        <strong>Frontend</strong>
+                        <span>AWS Amplify (auto-deploy from Git)</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-server"></i>
+                      <div>
+                        <strong>Backend API</strong>
+                        <span>AWS Elastic Beanstalk (t3.micro, auto-scaling)</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-microchip"></i>
+                      <div>
+                        <strong>AI Service</strong>
+                        <span>AWS EC2 Ubuntu (c7i-flex.large, systemd)</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-globe"></i>
+                      <div>
+                        <strong>CDN</strong>
+                        <span>AWS CloudFront (HTTPS proxy)</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-database"></i>
+                      <div>
+                        <strong>Database</strong>
+                        <span>MongoDB Atlas (M0 Free Tier)</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-hard-drive"></i>
+                      <div>
+                        <strong>Storage</strong>
+                        <span>AWS S3 (20GB)</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-magnifying-glass"></i>
+                      <div>
+                        <strong>Vector DB</strong>
+                        <span>Qdrant Cloud (1GB Free Tier)</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-chart-line"></i>
+                      <div>
+                        <strong>Monitoring</strong>
+                        <span>AWS CloudWatch (JSON logs)</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: PetPooja Revenue Intelligence -->
         <div class="project-card" id="project-petpooja">
           <div class="project-card-inner">
             <div class="project-brief">
@@ -277,7 +570,7 @@
           </div>
         </div>
 
-        <!-- Project 3: Heavenly -->
+        <!-- Project 4: Heavenly -->
         <div class="project-card" id="project-heavenly">
           <div class="project-card-inner">
             <div class="project-brief">
@@ -344,75 +637,7 @@
           </div>
         </div>
 
-        <!-- Project 4: DocuVault -->
-        <div class="project-card" id="project-docuvault">
-          <div class="project-card-inner">
-            <div class="project-brief">
-              <h3 class="project-name">
-                <a href="https://github.com/rudra1806/DocuVault" target="_blank" rel="noopener">DocuVault</a>
-              </h3>
-              <p class="project-type">Enterprise-Grade Cloud Document Management System</p>
-              <p class="project-tagline">AWS-powered document vault with drag & drop uploads, smart sharing via
-                password-protected links & real-time access analytics.</p>
-              <div class="project-tags">
-                <span>React</span><span>Node.js</span><span>Express.js</span><span>MongoDB</span><span>AWS
-                  S3</span><span>CloudFront</span>
-              </div>
-              <div class="project-brief-footer">
-                <div class="project-links">
-                  <a href="https://github.com/rudra1806/DocuVault" target="_blank" rel="noopener"><i
-                      class="fa-brands fa-github"></i> Code</a>
-                  <a href="https://main.d3binwb407isix.amplifyapp.com/" target="_blank" rel="noopener"><i
-                      class="fa-solid fa-arrow-up-right-from-square"></i> Live</a>
-                </div>
-                <button class="project-expand-btn" aria-label="Toggle project details" data-target="project-docuvault">
-                  <span class="expand-text">View Details</span>
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </button>
-              </div>
-            </div>
-            <div class="project-details">
-              <div class="project-details-inner">
-                <div class="project-details-divider"></div>
-                <p class="project-desc">
-                  Secure cloud document management system deployed on AWS. Features drag &amp; drop uploads to S3,
-                  intelligent file sharing with password-protected links, granular permissions, expiration controls,
-                  and comprehensive access analytics — all behind JWT auth with full user isolation.
-                </p>
-                <div class="project-highlights">
-                  <div class="highlight-item">
-                    <i class="fa-brands fa-aws"></i>
-                    <div>
-                      <strong>AWS Architecture</strong>
-                      <span>Amplify + EB + S3 + CloudFront</span>
-                    </div>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="fa-solid fa-share-nodes"></i>
-                    <div>
-                      <strong>Smart Sharing</strong>
-                      <span>Password-protected links</span>
-                    </div>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="fa-solid fa-chart-pie"></i>
-                    <div>
-                      <strong>Analytics</strong>
-                      <span>Access tracking + IP logging</span>
-                    </div>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="fa-solid fa-eye"></i>
-                    <div>
-                      <strong>File Preview</strong>
-                      <span>In-app viewer for 15+ formats</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
 
         <!-- Project 5: FleetFlow -->
         <div class="project-card" id="project-fleetflow">

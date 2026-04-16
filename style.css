@@ -997,6 +997,339 @@ body.modal-open {
   box-shadow: 0 8px 30px var(--accent-glow);
 }
 
+/* ========================================
+   PROJECT EXTRA SECTIONS (Modal)
+   ======================================== */
+
+/* --- Section Title --- */
+.modal-extra-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+
+/* --- Architecture Diagram --- */
+.architecture-diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 20px 0;
+}
+
+.arch-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.arch-row-split {
+  flex-wrap: wrap;
+}
+
+.arch-connector {
+  display: flex;
+  justify-content: center;
+  padding: 6px 0;
+  color: rgba(231, 76, 60, 0.4);
+  font-size: 0.75rem;
+}
+
+.arch-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  min-width: 120px;
+  text-align: center;
+  transition: all 0.3s var(--ease);
+}
+
+.arch-node:hover {
+  border-color: rgba(231, 76, 60, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.arch-node i {
+  font-size: 1.1rem;
+  margin-bottom: 2px;
+}
+
+.arch-node span {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.arch-node small {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* Architecture node color coding */
+.arch-node-user i {
+  color: var(--text-secondary);
+}
+
+.arch-node-frontend i {
+  color: #61DAFB;
+}
+
+.arch-node-cdn i {
+  color: #FF9900;
+}
+
+.arch-node-backend i {
+  color: #68A063;
+}
+
+.arch-node-ai i {
+  color: #e74c3c;
+}
+
+.arch-node-db i {
+  color: #4DB33D;
+}
+
+.arch-node-storage i {
+  color: #FF9900;
+}
+
+.arch-node-logs i {
+  color: #FF9900;
+}
+
+.arch-node-vector i {
+  color: #A259FF;
+}
+
+.arch-node-embed i {
+  color: #FFD54F;
+}
+
+.arch-node-llm i {
+  color: #e74c3c;
+}
+
+/* Protocol labels on connectors */
+.arch-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+  margin-right: 6px;
+}
+
+/* Offset connector (points from EC2 to AI services row) */
+.arch-connector-offset {
+  margin-left: auto;
+  margin-right: 15%;
+}
+
+/* AI services sub-row alignment */
+.arch-row-ai {
+  justify-content: flex-end;
+  padding-right: 5%;
+}
+
+/* --- Tech Stack Badges --- */
+.project-tech-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tech-badge-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.tech-badge-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  min-width: 110px;
+  padding-top: 5px;
+}
+
+.tech-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tech-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 1px solid;
+  transition: all 0.3s var(--ease);
+}
+
+.tech-badge:hover {
+  transform: translateY(-1px);
+}
+
+/* Badge color variations */
+.tech-badge-react {
+  background: rgba(97, 218, 251, 0.1);
+  color: #61DAFB;
+  border-color: rgba(97, 218, 251, 0.25);
+}
+
+.tech-badge-vite {
+  background: rgba(189, 52, 254, 0.1);
+  color: #BD34FE;
+  border-color: rgba(189, 52, 254, 0.25);
+}
+
+.tech-badge-tailwind {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38BDF8;
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.tech-badge-node {
+  background: rgba(104, 160, 99, 0.1);
+  color: #68A063;
+  border-color: rgba(104, 160, 99, 0.25);
+}
+
+.tech-badge-express {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+.tech-badge-mongo {
+  background: rgba(77, 179, 61, 0.1);
+  color: #4DB33D;
+  border-color: rgba(77, 179, 61, 0.25);
+}
+
+.tech-badge-fastapi {
+  background: rgba(0, 150, 136, 0.1);
+  color: #009688;
+  border-color: rgba(0, 150, 136, 0.25);
+}
+
+.tech-badge-python {
+  background: rgba(55, 118, 171, 0.1);
+  color: #3776AB;
+  border-color: rgba(55, 118, 171, 0.25);
+}
+
+.tech-badge-groq {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  border-color: rgba(231, 76, 60, 0.25);
+}
+
+.tech-badge-hf {
+  background: rgba(255, 213, 79, 0.1);
+  color: #FFD54F;
+  border-color: rgba(255, 213, 79, 0.25);
+}
+
+.tech-badge-qdrant {
+  background: rgba(162, 89, 255, 0.1);
+  color: #A259FF;
+  border-color: rgba(162, 89, 255, 0.25);
+}
+
+.tech-badge-aws {
+  background: rgba(255, 153, 0, 0.1);
+  color: #FF9900;
+  border-color: rgba(255, 153, 0, 0.25);
+}
+
+/* --- Deployment Grid --- */
+.deployment-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.deployment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  transition: all 0.3s var(--ease);
+}
+
+.deployment-item:hover {
+  border-color: rgba(231, 76, 60, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.deployment-item i {
+  color: var(--accent);
+  font-size: 0.85rem;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.deployment-item strong {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+}
+
+.deployment-item span {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* --- Additional Features List --- */
+.project-features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.project-features-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  padding: 6px 0;
+}
+
+.project-features-list li i {
+  color: #4ade80;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+}
+
+/* --- Modal extra section animation --- */
+.project-modal-overlay.active .modal-extra-section {
+  animation: modalFadeUp 0.5s 0.45s var(--ease) both;
+}
+
 /* Modal entrance animation for staggered children */
 .project-modal-overlay.active .modal-header {
   animation: modalFadeUp 0.5s 0.1s var(--ease) both;
@@ -1809,6 +2142,32 @@ body.modal-open {
   .project-modal-content .modal-highlights {
     grid-template-columns: 1fr;
   }
+
+  .deployment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-features-list {
+    grid-template-columns: 1fr;
+  }
+
+  .tech-badge-group {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tech-badge-label {
+    min-width: unset;
+  }
+
+  .arch-node {
+    min-width: 90px;
+    padding: 10px 12px;
+  }
+
+  .arch-node span {
+    font-size: 0.7rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1822,5 +2181,22 @@ body.modal-open {
 
   .stat-card {
     padding: 18px;
+  }
+
+  .arch-node {
+    min-width: 70px;
+    padding: 8px 10px;
+  }
+
+  .arch-node i {
+    font-size: 0.9rem;
+  }
+
+  .arch-node span {
+    font-size: 0.65rem;
+  }
+
+  .arch-node small {
+    font-size: 0.6rem;
   }
 }
