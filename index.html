@@ -802,97 +802,66 @@ graph TD
                 </div>
 
                 <!-- Architecture Diagram -->
-                <div class="project-extra-section" data-extra-title="Microservices Architecture">
-                  <div class="architecture-diagram">
-                    <!-- Tier 1: End Users -->
-                    <div class="arch-row">
-                      <div class="arch-node arch-node-user">
-                        <i class="fa-solid fa-users"></i>
-                        <span>End Users</span>
-                      </div>
-                    </div>
-                    <div class="arch-connector"><span class="arch-label">HTTPS</span><i
-                        class="fa-solid fa-arrow-down"></i></div>
+                <div class="project-extra-section" data-extra-title="AWS Production Architecture">
+                  <div class="mermaid-container">
+                    <button class="diagram-expand-btn"><i class="fa-solid fa-maximize"></i> Maximize</button>
+                    <div class="mermaid" id="mermaid-sys-docuvault">
+%%{init: {'theme': 'dark', 'themeVariables': { 'background': '#111111' }}}%%
+graph TD
+    User(["👤 End Users"]):::client
 
-                    <!-- Tier 2: AWS Amplify -->
-                    <div class="arch-row">
-                      <div class="arch-node arch-node-frontend">
-                        <i class="fa-brands fa-react"></i>
-                        <span>AWS Amplify</span>
-                        <small>React Frontend</small>
-                        <small>Auto-deploy on Git</small>
-                      </div>
-                    </div>
-                    <div class="arch-connector"><span class="arch-label">HTTPS</span><i
-                        class="fa-solid fa-arrow-down"></i></div>
+    subgraph CDN_FRONTEND["FRONTEND & EDGE LAYER"]
+        AMP["⚛️ AWS Amplify\nReact Frontend · Auto-deploy"]:::edgeN
+        CF["🌐 AWS CloudFront\nCDN & HTTPS Reverse Proxy"]:::edgeN
+    end
 
-                    <!-- Tier 3: CloudFront -->
-                    <div class="arch-row">
-                      <div class="arch-node arch-node-cdn">
-                        <i class="fa-solid fa-globe"></i>
-                        <span>AWS CloudFront</span>
-                        <small>CDN + HTTPS Proxy</small>
-                        <small>Solves Mixed Content</small>
-                      </div>
-                    </div>
-                    <div class="arch-connector"><span class="arch-label">HTTPS → HTTP</span><i
-                        class="fa-solid fa-arrow-down"></i></div>
+    subgraph BACKEND_SERVICES["APPLICATION LAYER"]
+        EBS["🟢 AWS Elastic Beanstalk\nNode.js Express API · t3.micro"]:::svcN
+        EC2["🧠 AWS EC2\nFastAPI AI Service · c7i‑flex.large"]:::aiN
+    end
 
-                    <!-- Tier 4: Elastic Beanstalk -->
-                    <div class="arch-row">
-                      <div class="arch-node arch-node-backend">
-                        <i class="fa-brands fa-node-js"></i>
-                        <span>AWS Elastic Beanstalk</span>
-                        <small>Node.js Backend</small>
-                        <small>t3.micro</small>
-                      </div>
-                    </div>
-                    <div class="arch-connector"><i class="fa-solid fa-arrow-down"></i></div>
+    subgraph DATA_PERSISTENCE["PERSISTENCE & PIPELINES"]
+        MDB[("🍃 MongoDB Atlas\nM0 Shared Cluster")]:::dbN
+        S3[("📦 AWS S3\nDocument Files Store")]:::dbN
+        CW[("📊 CloudWatch\nJSON Application Logs")]:::logsN
+    end
 
-                    <!-- Tier 5: Backend Services -->
-                    <div class="arch-row arch-row-split">
-                      <div class="arch-node arch-node-db">
-                        <i class="fa-solid fa-database"></i>
-                        <span>MongoDB Atlas</span>
-                        <small>M0</small>
-                      </div>
-                      <div class="arch-node arch-node-storage">
-                        <i class="fa-brands fa-aws"></i>
-                        <span>AWS S3</span>
-                        <small>Files · 20GB</small>
-                      </div>
-                      <div class="arch-node arch-node-logs">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>CloudWatch</span>
-                        <small>Logs · JSON</small>
-                      </div>
-                      <div class="arch-node arch-node-ai">
-                        <i class="fa-solid fa-brain"></i>
-                        <span>AWS EC2</span>
-                        <small>AI Service</small>
-                        <small>c7i-flex.large</small>
-                      </div>
-                    </div>
-                    <div class="arch-connector arch-connector-offset"><span class="arch-label">HTTP</span><i
-                        class="fa-solid fa-arrow-down"></i></div>
+    subgraph AI_SERVICES["AI & VECTOR LAYER"]
+        QDR[("🔍 Qdrant Cloud\nVector Database")]:::vectorN
+        HF[("🤗 HuggingFace\nBGE‑M3 Embedding Service")]:::aiExtN
+        GROQ[("⚡ Groq Cloud\nMeta‑Llama 3.3 70B LLM")]:::aiExtN
+    end
 
-                    <!-- Tier 6: AI External Services -->
-                    <div class="arch-row arch-row-split arch-row-ai">
-                      <div class="arch-node arch-node-vector">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <span>Qdrant Cloud</span>
-                        <small>Vectors</small>
-                      </div>
-                      <div class="arch-node arch-node-embed">
-                        <i class="fa-solid fa-cube"></i>
-                        <span>HuggingFace</span>
-                        <small>Embed</small>
-                      </div>
-                      <div class="arch-node arch-node-llm">
-                        <i class="fa-solid fa-bolt"></i>
-                        <span>Groq</span>
-                        <small>LLM</small>
-                      </div>
+    %% ── Application Traffic & Operations ──
+    User -->|HTTPS| AMP
+    User -->|HTTPS| CF
+    CF -->|HTTPS → HTTP| EBS
+    EBS -->|HTTP| EC2
+
+    %% ── Backend Data Persistence ──
+    EBS --> MDB
+    EBS --> S3
+    EBS --> CW
+
+    %% ── AI RAG Pipeline ──
+    EC2 -->|HTTP| QDR
+    EC2 -->|HTTP| HF
+    EC2 -->|HTTP| GROQ
+
+    %% ── Styles ──
+    classDef client fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe,stroke-width:2px
+    classDef edgeN fill:#312e81,stroke:#818cf8,color:#e0e7ff,stroke-width:2px
+    classDef svcN fill:#4c1d95,stroke:#a78bfa,color:#ede9fe,stroke-width:2px
+    classDef aiN fill:#5b21b6,stroke:#c084fc,color:#faf5ff,stroke-width:2px
+    classDef dbN fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:2px
+    classDef logsN fill:#1f2937,stroke:#6b7280,color:#f3f4f6,stroke-width:2px
+    classDef vectorN fill:#134e4a,stroke:#2dd4bf,color:#ccfbf1,stroke-width:2px
+    classDef aiExtN fill:#451a03,stroke:#fbbf24,color:#fef3c7,stroke-width:2px
+
+    style CDN_FRONTEND fill:#1e1b4b,stroke:#4338ca,color:#c7d2fe,stroke-width:2px
+    style BACKEND_SERVICES fill:#1a1a2e,stroke:#6d28d9,color:#ddd6fe,stroke-width:2px
+    style DATA_PERSISTENCE fill:#0c1f17,stroke:#059669,color:#a7f3d0,stroke-width:2px
+    style AI_SERVICES fill:#2c1b0c,stroke:#d97706,color:#fef3c7,stroke-width:2px
                     </div>
                   </div>
                 </div>

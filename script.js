@@ -392,14 +392,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trigger Mermaid dynamic compiler for rendered diagram tags
     if (window.mermaid) {
       setTimeout(() => {
-        // Compile ONLY the active (visible) panel's diagram to prevent 0x0 hidden rendering
-        const activeMermaid = modalContent.querySelector('.architecture-tab-content.active .mermaid');
-        if (activeMermaid) {
-          mermaid.run({
-            nodes: [activeMermaid]
-          });
-        }
-      }, 50); // Short tick to ensure EJS container fully populates
+        // Compile nodes that are either active in tabs or not part of any tab switcher
+        const mermaidNodes = modalContent.querySelectorAll('.mermaid');
+        mermaidNodes.forEach(node => {
+          const tabParent = node.closest('.architecture-tab-content');
+          if (!tabParent || tabParent.classList.contains('active')) {
+            mermaid.run({
+              nodes: [node]
+            });
+          }
+        });
+      }, 50); // Short tick to ensure container fully populates
     }
   }
 
