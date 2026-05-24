@@ -6,6 +6,26 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==========================================
+  // MERMAID.JS CONFIGURATION
+  // ==========================================
+  if (window.mermaid) {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      securityLevel: 'loose',
+      themeVariables: {
+        background: 'transparent',
+        primaryColor: '#1e1b4b',
+        primaryTextColor: '#ede9fe',
+        primaryBorderColor: '#818cf8',
+        lineColor: '#818cf8',
+        secondaryColor: '#4c1d95',
+        tertiaryColor: '#134e4a'
+      }
+    });
+  }
+
+  // ==========================================
   // PARTICLE CANVAS
   // ==========================================
   const canvas = document.getElementById('particleCanvas');
@@ -368,6 +388,19 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('modal-open');
     // Ensure modal starts scrolled to top
     modalOverlay.querySelector('.project-modal').scrollTop = 0;
+
+    // Trigger Mermaid dynamic compiler for rendered diagram tags
+    if (window.mermaid) {
+      setTimeout(() => {
+        // Compile ONLY the active (visible) panel's diagram to prevent 0x0 hidden rendering
+        const activeMermaid = modalContent.querySelector('.architecture-tab-content.active .mermaid');
+        if (activeMermaid) {
+          mermaid.run({
+            nodes: [activeMermaid]
+          });
+        }
+      }, 50); // Short tick to ensure EJS container fully populates
+    }
   }
 
   function closeProjectModal() {
@@ -399,6 +432,181 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
       closeProjectModal();
     }
+  });
+
+  // ==========================================
+  // ARCHITECTURE DIAGRAMS TABS SWITCHER
+  // ==========================================
+  document.addEventListener('click', (e) => {
+    const tabBtn = e.target.closest('.arch-tab-btn');
+    if (tabBtn) {
+      const tabId = tabBtn.dataset.tab;
+      const container = tabBtn.closest('.modal-extra-section');
+      if (container) {
+        // Toggle Active Tab Selector Class
+        container.querySelectorAll('.arch-tab-btn').forEach(btn => btn.classList.remove('active'));
+        tabBtn.classList.add('active');
+
+        // Toggle Active Content Panel Container
+        container.querySelectorAll('.architecture-tab-content').forEach(content => content.classList.remove('active'));
+        const activePanel = container.querySelector(`#${tabId}`);
+        if (activePanel) {
+          activePanel.classList.add('active');
+
+          // Dynamically render Mermaid diagram inside the newly active panel if it hasn't been rendered yet
+          const mermaidDiv = activePanel.querySelector('.mermaid');
+          if (mermaidDiv && !mermaidDiv.getAttribute('data-processed')) {
+            if (window.mermaid) {
+              setTimeout(() => {
+                mermaid.run({
+                  nodes: [mermaidDiv]
+                });
+              }, 50); // Short timeout to let the container compute its active display bounds
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // ==========================================
+  // ARCHITECTURE LIGHTBOX (SVG ZOOM & PAN)
+  // ==========================================
+  const lightbox = document.getElementById('diagramLightbox');
+  const lightboxContent = document.getElementById('lightboxContent');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const zoomInBtn = document.getElementById('zoomInBtn');
+  const zoomOutBtn = document.getElementById('zoomOutBtn');
+  const zoomResetBtn = document.getElementById('zoomResetBtn');
+  const zoomLevelText = document.getElementById('zoomLevel');
+
+  let isDragging = false;
+  let startX, startY;
+  let translateX = 0, translateY = 0;
+  let scale = 1;
+  let activeSvg = null;
+
+  function updateTransform() {
+    if (activeSvg) {
+      activeSvg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+      zoomLevelText.textContent = `${Math.round(scale * 100)}%`;
+    }
+  }
+
+  // Bind Maximize buttons inside EJS dynamic diagram nodes
+  document.addEventListener('click', (e) => {
+    const expandBtn = e.target.closest('.diagram-expand-btn');
+    if (expandBtn) {
+      const container = expandBtn.closest('.mermaid-container');
+      const renderedSvg = container?.querySelector('.mermaid svg');
+      if (renderedSvg) {
+        // Show Lightbox overlay
+        lightbox.classList.add('active');
+        document.body.classList.add('lightbox-open');
+
+        // Clone parsed Mermaid SVG node to keep original modal state
+        const clone = renderedSvg.cloneNode(true);
+        clone.removeAttribute('width');
+        clone.removeAttribute('height');
+        clone.style.width = '100%';
+        clone.style.height = '100%';
+        clone.style.maxWidth = '100%';
+        clone.style.maxHeight = '100%';
+        clone.style.transformOrigin = 'center';
+
+        lightboxContent.innerHTML = '';
+        lightboxContent.appendChild(clone);
+        activeSvg = clone;
+
+        // Reset positions
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        updateTransform();
+      }
+    }
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.classList.remove('lightbox-open');
+    activeSvg = null;
+  }
+
+  lightboxClose.addEventListener('click', closeLightbox);
+
+  lightbox.addEventListener('click', (e) => {
+    // Close on backdrop container clicking
+    if (e.target === lightbox || e.target === lightboxContent) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+      closeLightbox();
+    }
+  });
+
+  // Action Buttons handlers
+  zoomInBtn.addEventListener('click', () => {
+    scale = Math.min(scale + 0.15, 3.0);
+    updateTransform();
+  });
+
+  zoomOutBtn.addEventListener('click', () => {
+    scale = Math.max(scale - 0.15, 0.4);
+    updateTransform();
+  });
+
+  zoomResetBtn.addEventListener('click', () => {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+    updateTransform();
+  });
+
+  // Mouse drag coordinate tracker
+  lightboxContent.addEventListener('mousedown', (e) => {
+    if (!activeSvg) return;
+    isDragging = true;
+    activeSvg.style.cursor = 'grabbing';
+    startX = e.clientX - translateX;
+    startY = e.clientY - translateY;
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging || !activeSvg) return;
+    translateX = e.clientX - startX;
+    translateY = e.clientY - startY;
+    updateTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    if (activeSvg) {
+      activeSvg.style.cursor = 'grab';
+    }
+  });
+
+  // Touch screen dragging operations for smartphones/tablets
+  lightboxContent.addEventListener('touchstart', (e) => {
+    if (!activeSvg || e.touches.length !== 1) return;
+    isDragging = true;
+    startX = e.touches[0].clientX - translateX;
+    startY = e.touches[0].clientY - translateY;
+  });
+
+  window.addEventListener('touchmove', (e) => {
+    if (!isDragging || !activeSvg || e.touches.length !== 1) return;
+    translateX = e.touches[0].clientX - startX;
+    translateY = e.touches[0].clientY - startY;
+    updateTransform();
+  });
+
+  window.addEventListener('touchend', () => {
+    isDragging = false;
   });
 
 });

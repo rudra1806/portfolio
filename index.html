@@ -136,7 +136,529 @@
 
       <div class="projects-grid">
 
-        <!-- Project 1: Relay -->
+        <!-- Project 1: Heavenly -->
+        <div class="project-card project-card-featured" id="project-heavenly">
+          <div class="project-card-inner">
+            <div class="project-brief">
+              <h3 class="project-name project-name-accent">
+                <a href="https://github.com/rudra1806/Heavenly" target="_blank" rel="noopener">Heavenly</a>
+              </h3>
+              <p class="project-type">Microservices Property Rental Platform</p>
+              <p class="project-tagline">Distributed rental platform with 7 microservices, API Gateway, event-driven RabbitMQ workflows, Razorpay payments, Kubernetes deployment & Prometheus/Grafana observability.</p>
+              <div class="project-tags">
+                <span>Node.js</span><span>Express 5</span><span>MongoDB</span><span>Redis</span><span>RabbitMQ</span><span>Docker</span><span>Kubernetes</span><span>Razorpay</span><span>Cloudinary</span><span>Prometheus</span><span>Grafana</span>
+              </div>
+              <div class="project-brief-footer">
+                <div class="project-links">
+                  <a href="https://github.com/rudra1806/Heavenly" target="_blank" rel="noopener"><i
+                      class="fa-brands fa-github"></i> Code</a>
+                </div>
+                <button class="project-expand-btn" aria-label="Toggle project details" data-target="project-heavenly">
+                  <span class="expand-text">View Details</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </button>
+              </div>
+            </div>
+            <div class="project-details">
+              <div class="project-details-inner">
+                <div class="project-details-divider"></div>
+                <p class="project-desc">
+                  A distributed property rental platform re-architected from a monolith into 7 Node.js/Express 5 microservices with an API Gateway and server-rendered BFF. Features JWT authentication with Redis token blacklist, event-driven workflows via RabbitMQ, Razorpay payment integration, Cloudinary media management, MapLibre GL JS maps, and a full admin dashboard. Orchestrated with Docker Compose for local dev and Kubernetes (Minikube) for production-shape deployment with NGINX Ingress, HPA autoscaling, and a complete Prometheus + Grafana + Loki observability stack.
+                </p>
+                <div class="project-highlights">
+                  <div class="highlight-item">
+                    <i class="fa-solid fa-sitemap"></i>
+                    <div>
+                      <strong>Microservices</strong>
+                      <span>7 services + Gateway + BFF</span>
+                    </div>
+                  </div>
+                  <div class="highlight-item">
+                    <i class="fa-solid fa-lock"></i>
+                    <div>
+                      <strong>JWT Auth</strong>
+                      <span>Access/Refresh + Redis blacklist</span>
+                    </div>
+                  </div>
+                  <div class="highlight-item">
+                    <i class="fa-solid fa-circle-nodes"></i>
+                    <div>
+                      <strong>Event-Driven</strong>
+                      <span>RabbitMQ async workflows</span>
+                    </div>
+                  </div>
+                  <div class="highlight-item">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <div>
+                      <strong>Payments</strong>
+                      <span>Razorpay integration + refunds</span>
+                    </div>
+                  </div>
+                  <div class="highlight-item">
+                    <i class="fa-solid fa-dharmachakra"></i>
+                    <div>
+                      <strong>Kubernetes</strong>
+                      <span>Minikube + Ingress + HPA</span>
+                    </div>
+                  </div>
+                  <div class="highlight-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <div>
+                      <strong>Observability</strong>
+                      <span>Prometheus + Grafana + Loki</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Architecture Tabbed Mermaid Diagrams -->
+                <div class="project-extra-section" data-extra-title="Architecture">
+                  <div class="architecture-tabs">
+                    <button class="arch-tab-btn active" data-tab="system-arch-heavenly">System Architecture</button>
+                    <button class="arch-tab-btn" data-tab="k8s-arch-heavenly">Kubernetes Deployment</button>
+                  </div>
+                  <div class="architecture-tab-content active" id="system-arch-heavenly">
+                    <div class="mermaid-container">
+                      <button class="diagram-expand-btn"><i class="fa-solid fa-maximize"></i> Maximize</button>
+                      <div class="mermaid" id="mermaid-sys-heavenly">
+%%{init: {'theme': 'dark', 'themeVariables': { 'background': '#111111' }}}%%
+graph TD
+    User(["👤 Browser Client"]):::client
+
+    subgraph EDGE["EDGE LAYER"]
+        direction TB
+        BFF["BFF · Express + EJS\n:8080"]:::edgeN
+        GW["API Gateway\nJWT · Rate Limit · CORS · :3000"]:::edgeN
+    end
+
+    subgraph SERVICES["APPLICATION SERVICES"]
+        direction LR
+        subgraph CORE["Core Domain"]
+            direction LR
+            AUTH["Auth\n:3001"]:::svcN
+            LST["Listing\n:3002"]:::svcN
+            REV["Review\n:3003"]:::svcN
+            BKG["Booking\n:3004"]:::svcN
+        end
+        subgraph SUPPORT["Supporting"]
+            direction LR
+            MDA["Media\n:3005"]:::supN
+            SRC["Search\n:3006"]:::supN
+            ADM["Admin\n:3007"]:::supN
+        end
+    end
+
+    subgraph INFRA["DATA & MESSAGING LAYER"]
+        direction LR
+        RDS[("Redis\nCache · Token Blacklist")]:::dbN
+        MDB[("MongoDB\nDocument Store")]:::dbN
+        RMQ{{"RabbitMQ\nheavenly.events"}}:::mqN
+    end
+
+    CLD["☁ Cloudinary\nImage CDN"]:::extN
+    RPY["💳 Razorpay\nPayment Gateway"]:::extN
+
+    %% ── Primary Traffic Flow ──
+    User --> BFF
+    BFF -->|REST| GW
+    GW --> AUTH
+    GW --> LST
+    GW --> REV
+    GW --> BKG
+    GW --> MDA
+    GW --> SRC
+    GW --> ADM
+
+    %% ── Data Persistence ──
+    AUTH --> MDB
+    LST --> MDB
+    REV --> MDB
+    BKG --> MDB
+
+    %% ── Cache & Session ──
+    AUTH --> RDS
+    GW --> RDS
+    SRC --> RDS
+
+    %% ── Async Event Flows ──
+    AUTH -.->|"user.*"| RMQ
+    LST -.->|"listing.*"| RMQ
+    REV -.->|"review.*"| RMQ
+    BKG -.->|"booking.*"| RMQ
+    RMQ -.->|consumes| SRC
+
+    %% ── External Integrations ──
+    MDA -->|Upload API| CLD
+    BKG -->|Payment API| RPY
+
+    %% ── Styles ──
+    classDef client fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe,stroke-width:2px
+    classDef edgeN fill:#312e81,stroke:#818cf8,color:#e0e7ff,stroke-width:2px
+    classDef svcN fill:#4c1d95,stroke:#a78bfa,color:#ede9fe,stroke-width:2px
+    classDef supN fill:#134e4a,stroke:#2dd4bf,color:#ccfbf1,stroke-width:2px
+    classDef dbN fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:2px
+    classDef mqN fill:#451a03,stroke:#fbbf24,color:#fef3c7,stroke-width:2px
+    classDef extN fill:#164e63,stroke:#22d3ee,color:#cffafe,stroke-width:2px
+
+    style EDGE fill:#1e1b4b,stroke:#4338ca,color:#c7d2fe,stroke-width:2px
+    style SERVICES fill:#1a1a2e,stroke:#6d28d9,color:#ddd6fe,stroke-width:2px
+    style CORE fill:#2e1065,stroke:#7c3aed,color:#ddd6fe,stroke-width:1px
+    style SUPPORT fill:#0f3b3b,stroke:#0d9488,color:#ccfbf1,stroke-width:1px
+    style INFRA fill:#0c1f17,stroke:#059669,color:#a7f3d0,stroke-width:2px
+                      </div>
+                    </div>
+                  </div>
+                  <div class="architecture-tab-content" id="k8s-arch-heavenly">
+                    <div class="mermaid-container">
+                      <button class="diagram-expand-btn"><i class="fa-solid fa-maximize"></i> Maximize</button>
+                      <div class="mermaid" id="mermaid-k8s-heavenly">
+graph TD
+    BROWSER[Browser - heavenly.local]:::client
+    INGRESS[NGINX Ingress Controller]:::ingress
+
+    subgraph EDGE_K["Edge Tier"]
+        K_BFF[BFF Deployment - 8080]:::edgeK
+        K_GW[Gateway Deployment - 3000]:::edgeK
+    end
+
+    subgraph BACKEND_K["Backend Tier"]
+        K_AUTH[Auth - 3001]:::svcK
+        K_LST[Listing - 3002]:::svcK
+        K_REV[Review - 3003]:::svcK
+        K_BKG[Booking - 3004]:::svcK
+        K_MDA[Media - 3005]:::svcK
+        K_SRC[Search - 3006]:::svcK
+        K_ADM[Admin - 3007]:::svcK
+    end
+
+    subgraph INFRA_K["Infrastructure Tier"]
+        K_MDB[(MongoDB - 10Gi)]:::dbK
+        K_RDS[(Redis - 1Gi)]:::dbK
+        K_RMQ[(RabbitMQ - 5Gi)]:::mqK
+    end
+
+    subgraph PLATFORM_K["Platform Resources"]
+        K_CM[ConfigMap - heavenly-config]:::cfgK
+        K_SEC[Secret - heavenly-secrets]:::cfgK
+        K_HPA[HPA - CPU 70%]:::cfgK
+        K_NP[NetworkPolicy - firewall]:::cfgK
+    end
+
+    subgraph METRICS_K["Metrics Pipeline"]
+        K_PROM[Prometheus - Metrics]:::monK
+        K_GRAF[Grafana - Dashboards]:::monK
+        K_AM[Alertmanager]:::monK
+    end
+
+    subgraph LOGS_K["Logging Pipeline"]
+        K_LOKI[Loki - Logs]:::monK
+        K_PT[Promtail - DaemonSet]:::monK
+    end
+
+    BROWSER --> INGRESS
+    INGRESS --> K_BFF
+    K_BFF --> K_GW
+    K_GW --> K_AUTH
+    K_GW --> K_LST
+    K_GW --> K_REV
+    K_GW --> K_BKG
+    K_GW --> K_MDA
+    K_GW --> K_SRC
+    K_GW --> K_ADM
+
+    K_AUTH --> K_MDB
+    K_LST --> K_MDB
+    K_REV --> K_MDB
+    K_BKG --> K_MDB
+
+    K_AUTH --> K_RDS
+    K_GW --> K_RDS
+    K_SRC --> K_RDS
+
+    K_AUTH --> K_RMQ
+    K_LST --> K_RMQ
+    K_REV --> K_RMQ
+    K_BKG --> K_RMQ
+    K_SRC --> K_RMQ
+
+    K_PROM -.-> K_BFF
+    K_PROM -.-> K_GW
+    K_PT -.-> K_LOKI
+    K_GRAF --> K_PROM
+    K_GRAF --> K_LOKI
+    K_PROM --> K_AM
+
+    K_CM -.-> K_BFF
+    K_SEC -.-> K_BFF
+    K_HPA -.-> K_BFF
+    K_HPA -.-> K_GW
+
+    classDef client fill:#1e3a5f,stroke:#3b82f6,color:#dbeafe,stroke-width:2px
+    classDef ingress fill:#1e3a5f,stroke:#60a5fa,color:#dbeafe,stroke-width:2px
+    classDef edgeK fill:#312e81,stroke:#818cf8,color:#e0e7ff,stroke-width:2px
+    classDef svcK fill:#4c1d95,stroke:#a78bfa,color:#ede9fe,stroke-width:2px
+    classDef dbK fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:2px
+    classDef mqK fill:#451a03,stroke:#fbbf24,color:#fef3c7,stroke-width:2px
+    classDef cfgK fill:#1f2937,stroke:#6b7280,color:#d1d5db,stroke-width:1px
+    classDef monK fill:#4c0519,stroke:#fb7185,color:#ffe4e6,stroke-width:2px
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Services Inventory Grid -->
+                <div class="project-extra-section" data-extra-title="Services Inventory">
+                  <div class="services-grid">
+                    <!-- BFF -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">BFF Service</span>
+                        <span class="service-blade-port">:8080</span>
+                      </div>
+                      <p class="service-blade-desc">Server-rendered EJS UI, user-facing routes, browser sessions</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>BFF Tier · Online</span>
+                      </div>
+                    </div>
+                    <!-- API Gateway -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">API Gateway</span>
+                        <span class="service-blade-port">:3000</span>
+                      </div>
+                      <p class="service-blade-desc">JWT validation, rate limiting, CORS management, service routing proxy</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Gateway Tier · Online</span>
+                      </div>
+                    </div>
+                    <!-- Auth -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">Auth Service</span>
+                        <span class="service-blade-port">:3001</span>
+                      </div>
+                      <p class="service-blade-desc">User profiles, authentications, JWT lifecycle, Redis-backed blacklist</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Core Service · Online</span>
+                      </div>
+                    </div>
+                    <!-- Listing -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">Listing Service</span>
+                        <span class="service-blade-port">:3002</span>
+                      </div>
+                      <p class="service-blade-desc">Property listings metadata, CRUD operations, host verification</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Core Service · Online</span>
+                      </div>
+                    </div>
+                    <!-- Review -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">Review Service</span>
+                        <span class="service-blade-port">:3003</span>
+                      </div>
+                      <p class="service-blade-desc">Property review submission, aggregated rating computations</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Core Service · Online</span>
+                      </div>
+                    </div>
+                    <!-- Booking -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">Booking Service</span>
+                        <span class="service-blade-port">:3004</span>
+                      </div>
+                      <p class="service-blade-desc">Reservations logic, Razorpay APIs, automatic cancel & refunds</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Core Service · Online</span>
+                      </div>
+                    </div>
+                    <!-- Media -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">Media Service</span>
+                        <span class="service-blade-port">:3005</span>
+                      </div>
+                      <p class="service-blade-desc">Cloudinary uploads/deletes, responsive image formatting</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Support Tier · Online</span>
+                      </div>
+                    </div>
+                    <!-- Search -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">Search Service</span>
+                        <span class="service-blade-port">:3006</span>
+                      </div>
+                      <p class="service-blade-desc">Listing full-text search, geocoding via Redis caching</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Support Tier · Online</span>
+                      </div>
+                    </div>
+                    <!-- Admin -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">Admin Service</span>
+                        <span class="service-blade-port">:3007</span>
+                      </div>
+                      <p class="service-blade-desc">Cross-service admin aggregations & management panel dashboard</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Support Tier · Online</span>
+                      </div>
+                    </div>
+                    <!-- MongoDB -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">MongoDB</span>
+                        <span class="service-blade-port">:27017</span>
+                      </div>
+                      <p class="service-blade-desc">Persistent document store database for persistent service data states</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Database Tier · Online</span>
+                      </div>
+                    </div>
+                    <!-- Redis -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">Redis Store</span>
+                        <span class="service-blade-port">:6379</span>
+                      </div>
+                      <p class="service-blade-desc">Data caching layer, JWT blacklist store, geocoding lat/lng cache</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Database Tier · Online</span>
+                      </div>
+                    </div>
+                    <!-- RabbitMQ -->
+                    <div class="service-blade">
+                      <div class="service-blade-header">
+                        <span class="service-blade-name">RabbitMQ</span>
+                        <span class="service-blade-port">:5672</span>
+                      </div>
+                      <p class="service-blade-desc">Asynchronous event message broker routing event-driven workflows</p>
+                      <div class="service-status">
+                        <div class="service-led"></div>
+                        <span>Message Broker · Online</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tech Stack Details -->
+                <div class="project-extra-section" data-extra-title="Tech Stack Details">
+                  <div class="project-tech-badges">
+                    <div class="tech-badge-group">
+                      <span class="tech-badge-label">Frontend & BFF</span>
+                      <div class="tech-badges">
+                        <span class="tech-badge tech-badge-react">EJS Views</span>
+                        <span class="tech-badge tech-badge-express">ejs-mate</span>
+                        <span class="tech-badge tech-badge-tailwind">MapLibre GL JS</span>
+                        <span class="tech-badge tech-badge-vite">OpenStreetMap</span>
+                      </div>
+                    </div>
+                    <div class="tech-badge-group">
+                      <span class="tech-badge-label">Core Backend</span>
+                      <div class="tech-badges">
+                        <span class="tech-badge tech-badge-node">Node.js</span>
+                        <span class="tech-badge tech-badge-express">Express 5</span>
+                        <span class="tech-badge tech-badge-redis">Redis Cache</span>
+                        <span class="tech-badge tech-badge-rabbitmq">RabbitMQ Events</span>
+                        <span class="tech-badge tech-badge-mongo">MongoDB</span>
+                      </div>
+                    </div>
+                    <div class="tech-badge-group">
+                      <span class="tech-badge-label">DevOps & Cloud</span>
+                      <div class="tech-badges">
+                        <span class="tech-badge tech-badge-docker">Docker Compose</span>
+                        <span class="tech-badge tech-badge-kubernetes">Kubernetes</span>
+                        <span class="tech-badge tech-badge-express">NGINX Ingress</span>
+                        <span class="tech-badge tech-badge-qdrant">HPA Autoscaling</span>
+                      </div>
+                    </div>
+                    <div class="tech-badge-group">
+                      <span class="tech-badge-label">Observability</span>
+                      <div class="tech-badges">
+                        <span class="tech-badge tech-badge-prometheus">Prometheus</span>
+                        <span class="tech-badge tech-badge-grafana">Grafana</span>
+                        <span class="tech-badge tech-badge-groq">Loki Logs</span>
+                        <span class="tech-badge tech-badge-hf">Promtail Daemon</span>
+                      </div>
+                    </div>
+                    <div class="tech-badge-group">
+                      <span class="tech-badge-label">Cloud Integrations</span>
+                      <div class="tech-badges">
+                        <span class="tech-badge tech-badge-razorpay">Razorpay Gateway</span>
+                        <span class="tech-badge tech-badge-cloudinary">Cloudinary Media</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Deployment & Orchestration -->
+                <div class="project-extra-section" data-extra-title="Deployment">
+                  <div class="deployment-grid">
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-dharmachakra"></i>
+                      <div>
+                        <strong>Kubernetes Cluster</strong>
+                        <span>Local Minikube production-shape deployment</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-brands fa-docker"></i>
+                      <div>
+                        <strong>Containerization</strong>
+                        <span>Docker Compose orchestrating local dev lifecycle</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-server"></i>
+                      <div>
+                        <strong>Ingress Controller</strong>
+                        <span>NGINX Ingress managing reverse-proxy and path routing</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-arrows-up-down"></i>
+                      <div>
+                        <strong>Horizontal Scaling</strong>
+                        <span>HPA scaling listing & auth pods based on CPU limits</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-chart-pie"></i>
+                      <div>
+                        <strong>Metrics Stack</strong>
+                        <span>Prometheus scraping all pods + custom dashboards in Grafana</span>
+                      </div>
+                    </div>
+                    <div class="deployment-item">
+                      <i class="fa-solid fa-file-invoice"></i>
+                      <div>
+                        <strong>Centralized Logging</strong>
+                        <span>Loki and Promtail DaemonSet aggregation for all stdout logs</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: Relay -->
         <div class="project-card project-card-featured" id="project-relay">
           <div class="project-card-inner">
             <div class="project-brief">
@@ -208,7 +730,7 @@
           </div>
         </div>
 
-        <!-- Project 2: DocuVault -->
+        <!-- Project 3: DocuVault -->
         <div class="project-card project-card-featured" id="project-docuvault">
           <div class="project-card-inner">
             <div class="project-brief">
@@ -501,7 +1023,7 @@
           </div>
         </div>
 
-        <!-- Project 3: PetPooja Revenue Intelligence -->
+        <!-- Project 4: PetPooja Revenue Intelligence -->
         <div class="project-card" id="project-petpooja">
           <div class="project-card-inner">
             <div class="project-brief">
@@ -570,72 +1092,7 @@
           </div>
         </div>
 
-        <!-- Project 4: Heavenly -->
-        <div class="project-card" id="project-heavenly">
-          <div class="project-card-inner">
-            <div class="project-brief">
-              <h3 class="project-name">
-                <a href="https://github.com/rudra1806/Heavenly" target="_blank" rel="noopener">Heavenly</a>
-              </h3>
-              <p class="project-type">Full-stack Property Rental Marketplace</p>
-              <p class="project-tagline">Airbnb-style rental platform with geolocation search, Cloudinary image hosting
-                & secure Passport.js authentication.</p>
-              <div class="project-tags">
-                <span>Node.js</span><span>Express.js</span><span>MongoDB</span><span>Passport.js</span><span>Cloudinary</span><span>MVC</span>
-              </div>
-              <div class="project-brief-footer">
-                <div class="project-links">
-                  <a href="https://github.com/rudra1806/Heavenly" target="_blank" rel="noopener"><i
-                      class="fa-brands fa-github"></i> Code</a>
-                </div>
-                <button class="project-expand-btn" aria-label="Toggle project details" data-target="project-heavenly">
-                  <span class="expand-text">View Details</span>
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </button>
-              </div>
-            </div>
-            <div class="project-details">
-              <div class="project-details-inner">
-                <div class="project-details-divider"></div>
-                <p class="project-desc">
-                  A full-stack web application using Node.js, Express, MongoDB with MVC architecture.
-                  Features RESTful APIs, authentication with Passport.js, role-based access control,
-                  geolocation search using Nominatim API &amp; GeoJSON clustering, and Cloudinary image management.
-                </p>
-                <div class="project-highlights">
-                  <div class="highlight-item">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <div>
-                      <strong>Secure Auth</strong>
-                      <span>Passport.js + RBAC</span>
-                    </div>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    <div>
-                      <strong>Geolocation</strong>
-                      <span>Nominatim + GeoJSON</span>
-                    </div>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="fa-solid fa-cloud"></i>
-                    <div>
-                      <strong>Cloud Storage</strong>
-                      <span>Cloudinary integration</span>
-                    </div>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="fa-solid fa-lock"></i>
-                    <div>
-                      <strong>XSS Protection</strong>
-                      <span>Joi + HTTP-only cookies</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
 
 
 
@@ -1176,6 +1633,23 @@
   <!-- Back to top -->
   <button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
+  <!-- ===== DIAGRAM LIGHTBOX ===== -->
+  <div class="diagram-lightbox" id="diagramLightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox"><i class="fa-solid fa-xmark"></i></button>
+    <div class="lightbox-controls">
+      <button id="zoomOutBtn" title="Zoom Out"><i class="fa-solid fa-minus"></i></button>
+      <button id="zoomResetBtn" title="Reset Zoom"><i class="fa-solid fa-arrows-to-dot"></i></button>
+      <button id="zoomInBtn" title="Zoom In"><i class="fa-solid fa-plus"></i></button>
+      <span class="zoom-level" id="zoomLevel">100%</span>
+    </div>
+    <div class="lightbox-title" id="lightboxTitle">Architecture Diagram</div>
+    <div class="lightbox-content" id="lightboxContent">
+      <!-- Dynamically cloned SVG -->
+    </div>
+  </div>
+
+  <!-- Mermaid.js for Dynamic Architecture Rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
   <!-- Web3Forms hCaptcha Script -->
   <script src="https://web3forms.com/client/script.js" async defer></script>
   <script src="script.js"></script>
