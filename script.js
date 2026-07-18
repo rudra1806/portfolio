@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const copyBtn = document.getElementById('copyEmail');
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText('rudrapatelrds09@gmail.com').then(() => {
+      navigator.clipboard.writeText('rudrasanandiya.dev@gmail.com').then(() => {
         const icon = copyBtn.querySelector('i');
         icon.className = 'fa-solid fa-check';
         copyBtn.style.color = '#4ade80';
