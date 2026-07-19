@@ -6,6 +6,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==========================================
+  // PRELOADER / INTRO ANIMATION
+  // ==========================================
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    setTimeout(() => {
+      preloader.classList.add('exit');
+      document.body.classList.remove('preloader-active');
+      setTimeout(() => preloader.remove(), 1000);
+    }, 4200);
+  }
+
+  // ==========================================
   // MERMAID.JS CONFIGURATION
   // ==========================================
   if (window.mermaid) {
@@ -150,10 +162,33 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // Mobile scroll detection — freezes node positions during scroll
+    // to prevent the "jump to new pattern" when the browser unfreezes
+    // the composited fixed layer after scroll momentum ends.
+    let isScrollFrozen = false;
+    let scrollTimer;
+    const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    if (hasTouchScreen) {
+      window.addEventListener('scroll', () => {
+        isScrollFrozen = true;
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          isScrollFrozen = false;
+        }, 100);
+      }, { passive: true });
+    }
+
     function animate() {
       requestAnimationFrame(animate);
       ctx.clearRect(0, 0, width, height);
-      nodes.forEach(node => node.update());
+      nodes.forEach(node => {
+        if (isScrollFrozen) {
+          node.draw();   // Redraw at current position — no movement
+        } else {
+          node.update();  // Move + draw
+        }
+      });
       connectNodes();
     }
 
