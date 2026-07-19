@@ -13,8 +13,160 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       preloader.classList.add('exit');
       document.body.classList.remove('preloader-active');
-      setTimeout(() => preloader.remove(), 1000);
-    }, 4200);
+      
+      // Trigger the premium entrance animation
+      playEntranceAnimation();
+      
+      setTimeout(() => {
+        preloader.remove();
+        // Refresh ScrollTrigger calculations after preloader is removed and page scroll is unlocked
+        if (typeof ScrollTrigger !== 'undefined') {
+          ScrollTrigger.refresh();
+        }
+      }, 1000);
+    }, 3600); // Decreased total preloader reading time to 3.6s
+  } else {
+    playEntranceAnimation();
+  }
+
+  // Helper to determine which section is currently active in the viewport on page load/refresh
+  function getActiveSection() {
+    const scrollPosition = window.scrollY + window.innerHeight / 3;
+    const hero = document.getElementById('home');
+    let activeSection = hero;
+    
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(sec => {
+      const top = sec.offsetTop;
+      const bottom = top + sec.offsetHeight;
+      if (scrollPosition >= top && scrollPosition <= bottom) {
+        activeSection = sec;
+      }
+    });
+    return activeSection || hero;
+  }
+
+  // Play a premium springy iOS-style pop-up entrance animation for the visible section
+  function playEntranceAnimation() {
+    if (typeof gsap === 'undefined') return;
+
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // Initialize ScrollTrigger animations AFTER the entrance animation is complete
+        initScrollAnimations();
+      }
+    });
+
+    // 1. Softly scale and fade in the mesh blobs and particle network canvas
+    tl.fromTo('.mesh-background', 
+      { opacity: 0, scale: 0.9 }, 
+      { opacity: 1, scale: 1, duration: 1.2, ease: "power4.out" }
+    );
+
+    tl.fromTo('#networkCanvas', 
+      { opacity: 0 }, 
+      { opacity: 1, duration: 0.8 },
+      "-=1.0"
+    );
+
+    // 2. Slide in the navbar — only animate opacity + slide via CSS keyframe
+    // IMPORTANT: navbar uses transform:translateX(-50%) for centering.
+    // GSAP's `y` property would overwrite translateX, breaking the centering.
+    // So we drive the slide via a CSS animation on `top` and let GSAP only drive opacity.
+    const navbarEl = document.querySelector('.navbar');
+    if (navbarEl) {
+      gsap.set('.navbar', { opacity: 0 }); // Hide via GSAP (not CSS) — clearProps later restores visibility
+      navbarEl.style.animation = 'navbarSlideIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards';
+      tl.to('.navbar',
+        { 
+          opacity: 1, 
+          duration: 0.7, 
+          ease: "power3.out",
+          onComplete: () => gsap.set('.navbar', { clearProps: 'opacity' })
+        },
+        "-=1.1"
+      );
+    }
+
+    // 3. Find the active section based on current scroll position
+    const activeSection = getActiveSection();
+
+    if (activeSection && activeSection.classList.contains('hero')) {
+      // Set hero elements invisible NOW via GSAP (not CSS) so they start hidden
+      // but naturally revert to visible once GSAP inline styles are cleared
+      const heroEls = ['.hero-greeting', '.hero-name', '.hero-badge', '.hero-tagline', '.hero-actions'];
+      gsap.set(heroEls, { opacity: 0, y: 40, scale: 0.95, filter: 'blur(4px)' });
+
+      // Stagger-pop the hero content quickly
+      tl.to(heroEls,
+        { 
+          opacity: 1, 
+          y: 0, 
+          scale: 1, 
+          filter: "blur(0px)",
+          duration: 0.9, 
+          ease: "back.out(1.2)",
+          stagger: 0.08,
+          // After animation: strip ALL GSAP inline styles so hero uses natural CSS (visible)
+          // This makes the hero permanently visible regardless of future GSAP operations
+          onComplete: () => gsap.set(heroEls, { clearProps: 'all' })
+        },
+        "-=0.9"
+      );
+    } else if (activeSection) {
+      // Animating a sub-section if we loaded/refreshed directly onto it
+      const title = activeSection.querySelector('.section-title');
+      const subtitle = activeSection.querySelector('.section-subtitle');
+      const content = activeSection.querySelector('.about-grid, .projects-grid, .timeline, .achievements-bento, .contact-content');
+
+      // Skills section: stagger individual bento cards for premium tile-by-tile pop
+      if (activeSection.id === 'skills') {
+        const bentoCards = activeSection.querySelectorAll('.bento-card');
+        const elementsToAnimate = [title, subtitle].filter(el => el !== null);
+
+        if (elementsToAnimate.length > 0) {
+          gsap.set(elementsToAnimate, { opacity: 0 });
+          tl.fromTo(elementsToAnimate,
+            { opacity: 0, y: 30, filter: "blur(4px)" },
+            { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: "power3.out", stagger: 0.08 },
+            "-=0.9"
+          );
+        }
+        if (bentoCards.length > 0) {
+          gsap.set(bentoCards, { opacity: 0 });
+          tl.fromTo(bentoCards,
+            { opacity: 0, y: 30, scale: 0.95 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "back.out(1.2)", stagger: 0.06 },
+            "-=0.5"
+          );
+        }
+      } else {
+        const elementsToAnimate = [title, subtitle, content].filter(el => el !== null);
+
+        if (elementsToAnimate.length > 0) {
+          gsap.set(elementsToAnimate, { opacity: 0 });
+
+          tl.fromTo(elementsToAnimate,
+            { 
+              opacity: 0, 
+              y: 40, 
+              scale: 0.95, 
+              filter: "blur(4px)" 
+            },
+            { 
+              opacity: 1, 
+              y: 0, 
+              scale: 1, 
+              filter: "blur(0px)",
+              duration: 0.9, 
+              ease: "back.out(1.2)", 
+              stagger: 0.1 
+            },
+            "-=0.9"
+          );
+        }
+      }
+    }
   }
 
   // ==========================================
@@ -354,44 +506,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
   statNumbers.forEach(el => counterObserver.observe(el));
 
-  // ==========================================
-  // GSAP SCROLL ANIMATIONS
-  // ==========================================
-  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
+  // Initialize scroll triggered animations for other sections
+  function initScrollAnimations() {
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
 
-    // Staggered reveal for sections
-    gsap.utils.toArray('.section').forEach(section => {
-      gsap.fromTo(section, 
-        { opacity: 0, y: 50 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 1, 
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-          }
+      // Find the active section that was already animated during entrance
+      const activeSection = getActiveSection();
+
+      // Staggered reveal for sections
+      gsap.utils.toArray('.section').forEach(section => {
+        // Skip animating the active section to prevent double animations
+        if (section === activeSection) {
+          gsap.set(section, { opacity: 1, y: 0 });
+          return;
         }
-      );
-    });
 
-    // Staggered reveal for project cards
-    gsap.fromTo('.project-card',
-      { opacity: 0, y: 40 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: '.projects-grid',
-          start: "top 75%",
+        gsap.fromTo(section, 
+          { opacity: 0, y: 50 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            duration: 1, 
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 80%",
+            }
+          }
+        );
+      });
+
+      // Staggered reveal for project cards (only if the projects section wasn't active on load)
+      if (!activeSection || activeSection.id !== 'projects') {
+        gsap.fromTo('.project-card',
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: '.projects-grid',
+              start: "top 75%",
+            }
+          }
+        );
+      }
+
+      // Staggered reveal for bento cards inside skills section
+      // (only if skills section wasn't active on load — that case is handled by playEntranceAnimation)
+      if (!activeSection || activeSection.id !== 'skills') {
+        const skillsSection = document.getElementById('skills');
+        if (skillsSection) {
+          const bentoCards = skillsSection.querySelectorAll('.bento-card');
+          gsap.fromTo(bentoCards,
+            { opacity: 0, y: 30, scale: 0.95 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.7,
+              stagger: 0.08,
+              ease: "back.out(1.2)",
+              scrollTrigger: {
+                trigger: skillsSection.querySelector('.bento-grid'),
+                start: "top 80%",
+              }
+            }
+          );
         }
       }
-    );
+    }
   }
 
   // ==========================================

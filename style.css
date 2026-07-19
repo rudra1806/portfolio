@@ -101,9 +101,13 @@ ul {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   z-index: 1000;
-  transition: all 0.4s var(--ease);
+  transition: background 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
+@keyframes navbarSlideIn {
+  from { top: -80px; }
+  to   { top: 16px; }
+}
 
 
 .nav-container {
@@ -595,7 +599,6 @@ body.preloader-active {
   font-size: 1.1rem;
   color: var(--text-secondary);
   margin-bottom: 12px;
-  animation: fadeUp 0.8s var(--ease) both;
 }
 
 .hero-name {
@@ -607,12 +610,10 @@ body.preloader-active {
   margin-bottom: 20px;
   color: #fff;
   text-shadow: 0 4px 20px rgba(255, 255, 255, 0.15), 0 0 10px rgba(255, 255, 255, 0.1);
-  animation: fadeUp 0.8s 0.15s var(--ease) both;
 }
 
 .hero-badge {
   display: inline-block;
-  animation: fadeUp 0.8s 0.3s var(--ease) both;
 }
 
 .hero-badge span {
@@ -632,7 +633,6 @@ body.preloader-active {
   color: var(--text-secondary);
   margin-top: 24px;
   line-height: 1.8;
-  animation: fadeUp 0.8s 0.45s var(--ease) both;
 }
 
 .highlight-italic {
@@ -648,7 +648,6 @@ body.preloader-active {
   justify-content: center;
   gap: 24px;
   flex-wrap: wrap;
-  animation: fadeUp 0.8s 0.6s var(--ease) both;
 }
 
 .hero-email {
