@@ -286,6 +286,10 @@ ul {
   pointer-events: none;
   background-color: var(--bg-primary);
   overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  transform: translateZ(0); /* Force GPU layer — prevents mobile scroll freeze */
 }
 
 #networkCanvas {
@@ -295,6 +299,10 @@ ul {
   height: 100%;
   z-index: 1;
   pointer-events: none;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  transform: translateZ(0); /* Force GPU layer — prevents mobile scroll freeze */
 }
 
 .mesh-blob {
@@ -302,6 +310,9 @@ ul {
   border-radius: 50%;
   opacity: 0.6;
   animation: floatBlob 20s infinite ease-in-out alternate;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .mesh-blob-1 {

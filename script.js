@@ -107,7 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initNodes() {
       nodes = [];
-      const numNodes = Math.min((width * height) / 12000, 150); // cap at 150 nodes for perf
+      const isMobile = width < 768;
+      const numNodes = Math.max(40, Math.min((width * height) / 12000, isMobile ? 60 : 150));
       for (let i = 0; i < numNodes; i++) {
         const x = Math.random() * width;
         const y = Math.random() * height;
