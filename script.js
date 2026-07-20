@@ -6,27 +6,167 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ==========================================
-  // PRELOADER / INTRO ANIMATION
+  // CINEMATIC PRELOADER / INTRO ANIMATION
   // ==========================================
   const preloader = document.getElementById('preloader');
-  if (preloader) {
-    setTimeout(() => {
-      preloader.classList.add('exit');
-      document.body.classList.remove('preloader-active');
-      
-      // Trigger the premium entrance animation
-      playEntranceAnimation();
-      
-      setTimeout(() => {
-        preloader.remove();
-        // Refresh ScrollTrigger calculations after preloader is removed and page scroll is unlocked
-        if (typeof ScrollTrigger !== 'undefined') {
-          ScrollTrigger.refresh();
-        }
-      }, 1000);
-    }, 3600); // Decreased total preloader reading time to 3.6s
-  } else {
+  let entranceAnimationStarted = false;
+
+  function startPageEntrance() {
+    if (entranceAnimationStarted) return;
+    entranceAnimationStarted = true;
     playEntranceAnimation();
+  }
+
+  if (preloader) {
+    const progressFill = preloader.querySelector('.preloader-progress-fill');
+    const progressValue = document.getElementById('preloaderProgressValue');
+    const progressStatus = document.getElementById('preloaderStatus');
+    let progressFrameId = null;
+    let sequenceFallbackId = null;
+    let removalFallbackId = null;
+    let watchdogId = null;
+    let sequenceDuration = 3400;
+    let progressStartedAt = 0;
+    let sequenceComplete = false;
+    let assetsReady = false;
+    let isClosing = false;
+    let isRemoved = false;
+    let currentStatus = '';
+
+    const delay = (duration) => new Promise((resolve) => setTimeout(resolve, duration));
+
+    function readCssTime(customProperty, fallback) {
+      const value = getComputedStyle(preloader).getPropertyValue(customProperty).trim();
+      const amount = Number.parseFloat(value);
+
+      if (!Number.isFinite(amount)) return fallback;
+      return value.endsWith('ms') ? amount : amount * 1000;
+    }
+
+    function setProgress(value) {
+      if (!progressValue) return;
+      const roundedValue = Math.max(0, Math.min(100, Math.round(value)));
+      progressValue.textContent = String(roundedValue).padStart(2, '0');
+    }
+
+    function setStatus(message) {
+      if (!progressStatus || message === currentStatus) return;
+      currentStatus = message;
+      progressStatus.textContent = message;
+    }
+
+    function updateProgress(timestamp) {
+      if (isClosing || isRemoved) return;
+
+      const elapsed = timestamp - progressStartedAt;
+      const ratio = Math.min(1, Math.max(0, elapsed / sequenceDuration));
+      setProgress(Math.min(99, ratio * 100));
+
+      if (ratio >= 0.9) {
+        setStatus('Finalizing composition');
+      } else if (ratio >= 0.55) {
+        setStatus('Composing interface');
+      } else if (ratio >= 0.22) {
+        setStatus('Calibrating visuals');
+      } else {
+        setStatus('Establishing signal');
+      }
+
+      if (ratio < 1) {
+        progressFrameId = requestAnimationFrame(updateProgress);
+      }
+    }
+
+    function refreshScrollPositions() {
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+      }
+    }
+
+    function removePreloader() {
+      if (isRemoved) return;
+      isRemoved = true;
+
+      if (progressFrameId !== null) cancelAnimationFrame(progressFrameId);
+      clearTimeout(sequenceFallbackId);
+      clearTimeout(removalFallbackId);
+      clearTimeout(watchdogId);
+      preloader.removeEventListener('animationend', handleAnimationEnd);
+      document.body.classList.remove('preloader-active');
+      preloader.remove();
+      refreshScrollPositions();
+    }
+
+    function closePreloader() {
+      if (isClosing || isRemoved) return;
+      isClosing = true;
+
+      if (progressFrameId !== null) cancelAnimationFrame(progressFrameId);
+      clearTimeout(sequenceFallbackId);
+      clearTimeout(watchdogId);
+      setProgress(100);
+      setStatus('Ready');
+
+      preloader.classList.add('exit');
+      preloader.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('preloader-active');
+
+      // Start the site beneath the opening curtains so both animations feel continuous.
+      startPageEntrance();
+
+      const exitDuration = readCssTime('--preloader-exit-duration', 1150);
+      removalFallbackId = setTimeout(removePreloader, exitDuration + 250);
+    }
+
+    function maybeClosePreloader() {
+      if (sequenceComplete && assetsReady) {
+        closePreloader();
+      }
+    }
+
+    function markSequenceComplete() {
+      if (sequenceComplete) return;
+      sequenceComplete = true;
+      maybeClosePreloader();
+    }
+
+    function handleAnimationEnd(event) {
+      if (event.target === progressFill && event.animationName === 'preloaderProgress') {
+        markSequenceComplete();
+      }
+
+      if (event.target === preloader && event.animationName === 'preloaderExit') {
+        removePreloader();
+      }
+    }
+
+    preloader.addEventListener('animationend', handleAnimationEnd);
+
+    requestAnimationFrame((timestamp) => {
+      preloader.classList.add('is-running');
+      sequenceDuration = readCssTime('--preloader-duration', 3400);
+      progressStartedAt = timestamp;
+      setProgress(0);
+      setStatus('Establishing signal');
+      progressFrameId = requestAnimationFrame(updateProgress);
+
+      // Animation events are primary; this covers browsers that suppress them.
+      sequenceFallbackId = setTimeout(markSequenceComplete, sequenceDuration + 300);
+      watchdogId = setTimeout(closePreloader, sequenceDuration + 2400);
+
+      // Fonts improve the reveal, but a slow or blocked font request must never trap the page.
+      const fontsReady = document.fonts && document.fonts.ready
+        ? Promise.resolve(document.fonts.ready).catch(() => undefined)
+        : Promise.resolve();
+      const assetWaitLimit = Math.min(1400, Math.max(200, sequenceDuration * 0.45));
+
+      Promise.race([fontsReady, delay(assetWaitLimit)]).then(() => {
+        assetsReady = true;
+        maybeClosePreloader();
+      });
+    });
+  } else {
+    startPageEntrance();
   }
 
   // Helper to determine which section is currently active in the viewport on page load/refresh
@@ -804,7 +944,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openProjectModal(card) {
     // Read data from the card
-    const nameEl = card.querySelector('.project-name a');
+    // Prefer the linked title, but fall back to the plain heading text for
+    // projects without a public link (e.g. the Keystone internship project).
+    const nameEl = card.querySelector('.project-name a') || card.querySelector('.project-name');
     const name = nameEl ? nameEl.textContent.trim() : '';
     const isAccent = card.querySelector('.project-name-accent') !== null;
     const type = card.querySelector('.project-type')?.textContent || '';

@@ -29,27 +29,76 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <link rel="stylesheet" href="style.css" />
+  <noscript>
+    <style>
+      body.preloader-active { overflow: auto; }
+      .preloader { display: none; }
+    </style>
+  </noscript>
 </head>
 
 <body class="preloader-active">
 
-  <!-- ===== PRELOADER / INTRO ANIMATION ===== -->
-  <div id="preloader" class="preloader">
-    <!-- EKG Heartbeat Line -->
-    <svg class="preloader-ekg" viewBox="0 0 600 100" preserveAspectRatio="none">
-      <path class="ekg-line" d="M0,50 L220,50 L240,15 L250,50 L260,85 L280,50 L300,42 L310,50 L600,50" />
-    </svg>
+  <!-- ===== CINEMATIC PRELOADER ===== -->
+  <div id="preloader" class="preloader" role="status" aria-live="polite" aria-atomic="true"
+    aria-label="Loading Rudra Sanandiya's portfolio">
+    <!-- Opaque halves become the cinematic reveal curtains. -->
+    <div class="preloader-curtain preloader-curtain--top" aria-hidden="true"></div>
+    <div class="preloader-curtain preloader-curtain--bottom" aria-hidden="true"></div>
 
-    <!-- Content -->
-    <div class="preloader-content">
-      <div class="preloader-monogram">
-        <span class="preloader-letter">R</span><span class="preloader-accent">.</span>
+    <div class="preloader-ambient" aria-hidden="true"></div>
+    <div class="preloader-grain" aria-hidden="true"></div>
+
+    <div class="preloader-frame" aria-hidden="true">
+      <span class="preloader-corner preloader-corner--tl"></span>
+      <span class="preloader-corner preloader-corner--tr"></span>
+      <span class="preloader-corner preloader-corner--bl"></span>
+      <span class="preloader-corner preloader-corner--br"></span>
+    </div>
+
+    <div class="preloader-meta" aria-hidden="true">
+      <span>Portfolio / Selected Work</span>
+      <span>Ahmedabad / India</span>
+    </div>
+
+    <div class="preloader-stage" aria-hidden="true">
+      <div class="preloader-signal">
+        <svg viewBox="0 0 600 100" preserveAspectRatio="none">
+          <path class="preloader-signal-base" d="M0,50 H600" />
+          <path class="preloader-signal-path"
+            d="M0,50 L205,50 L225,42 L238,50 L250,13 L263,87 L278,50 L292,50 L303,36 L316,50 L600,50" />
+        </svg>
       </div>
-      <div class="preloader-name" aria-label="Rudra Sanandiya">
+
+      <div class="preloader-mark">
+        <span class="preloader-ring preloader-ring--outer"></span>
+        <span class="preloader-ring preloader-ring--inner"></span>
+        <div class="preloader-monogram">
+          <span class="preloader-letter">R</span><span class="preloader-accent">.</span>
+        </div>
+        <span class="preloader-mark-index">RS / 01</span>
+      </div>
+
+      <div class="preloader-name">
         <span style="--i:0">R</span><span style="--i:1">u</span><span style="--i:2">d</span><span style="--i:3">r</span><span style="--i:4">a</span><span class="preloader-space" style="--i:5">&nbsp;</span><span style="--i:6">S</span><span style="--i:7">a</span><span style="--i:8">n</span><span style="--i:9">a</span><span style="--i:10">n</span><span style="--i:11">d</span><span style="--i:12">i</span><span style="--i:13">y</span><span style="--i:14">a</span>
       </div>
-      <div class="preloader-title">Software Developer</div>
+
+      <div class="preloader-title">
+        <span>Software</span><i></i><span>Developer</span>
+      </div>
     </div>
+
+    <div class="preloader-progress" aria-hidden="true">
+      <div class="preloader-progress-meta">
+        <span id="preloaderStatus">Establishing signal</span>
+        <span class="preloader-progress-number"><span id="preloaderProgressValue">00</span><sup>%</sup></span>
+      </div>
+      <div class="preloader-progress-track">
+        <span class="preloader-progress-fill"><i></i></span>
+      </div>
+    </div>
+
+    <span class="preloader-sr-only">Loading the portfolio experience. Please wait.</span>
   </div>
 
   <!-- ===== CUSTOM CURSOR ===== -->
