@@ -223,27 +223,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const netCanvas = document.getElementById('networkCanvas');
   if (netCanvas) {
     const ctx = netCanvas.getContext('2d');
-    let width, height;
+    let width = 0;
+    let height = 0;
+    let pixelRatio = 1;
     let nodes = [];
+    let resizePending = false;
+    let lastFrameTime = null;
+
+    const NOMINAL_FRAME_DURATION = 1000 / 60;
+    const MAX_FRAME_DELTA = 50;
+    const MAX_PIXEL_RATIO = 2;
     
     // Mouse tracking for the network
     const mouse = { x: null, y: null, radius: 150 };
     window.addEventListener('mousemove', (e) => {
-      mouse.x = e.x;
-      mouse.y = e.y;
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
     });
     window.addEventListener('mouseout', () => {
       mouse.x = null;
       mouse.y = null;
     });
-
-    function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      netCanvas.width = width;
-      netCanvas.height = height;
-      initNodes();
-    }
     
     class Node {
       constructor(x, y) {
@@ -253,31 +253,120 @@ document.addEventListener('DOMContentLoaded', () => {
         this.vy = (Math.random() - 0.5) * 1.5;
         this.radius = Math.random() * 1.5 + 0.5;
       }
+
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(231, 76, 60, 0.8)';
         ctx.fill();
       }
-      update() {
-        if (this.x < 0 || this.x > width) this.vx = -this.vx;
-        if (this.y < 0 || this.y > height) this.vy = -this.vy;
-        
-        this.x += this.vx;
-        this.y += this.vy;
+
+      update(frameScale) {
+        this.x += this.vx * frameScale;
+        this.y += this.vy * frameScale;
+
+        // Reflect overshoot back into the canvas so a delayed frame cannot
+        // leave a node outside the visible area.
+        if (this.x < 0) {
+          this.x = -this.x;
+          this.vx = Math.abs(this.vx);
+        } else if (this.x > width) {
+          this.x = width - (this.x - width);
+          this.vx = -Math.abs(this.vx);
+        }
+
+        if (this.y < 0) {
+          this.y = -this.y;
+          this.vy = Math.abs(this.vy);
+        } else if (this.y > height) {
+          this.y = height - (this.y - height);
+          this.vy = -Math.abs(this.vy);
+        }
+
         this.draw();
       }
     }
 
-    function initNodes() {
-      nodes = [];
+    function getTargetNodeCount() {
       const isMobile = width < 768;
-      const numNodes = Math.max(40, Math.min((width * height) / 12000, isMobile ? 60 : 150));
-      for (let i = 0; i < numNodes; i++) {
-        const x = Math.random() * width;
-        const y = Math.random() * height;
-        nodes.push(new Node(x, y));
+      const maximum = isMobile ? 60 : 150;
+      return Math.round(Math.max(40, Math.min((width * height) / 12000, maximum)));
+    }
+
+    function createNode() {
+      return new Node(Math.random() * width, Math.random() * height);
+    }
+
+    function initNodes() {
+      nodes = Array.from({ length: getTargetNodeCount() }, createNode);
+    }
+
+    function reconcileNodeCount() {
+      const targetCount = getTargetNodeCount();
+
+      while (nodes.length < targetCount) {
+        nodes.push(createNode());
       }
+
+      if (nodes.length > targetCount) {
+        nodes.length = targetCount;
+      }
+    }
+
+    function resizeCanvas() {
+      const bounds = netCanvas.getBoundingClientRect();
+      const nextWidth = Math.max(
+        1,
+        Math.round(bounds.width || document.documentElement.clientWidth || window.innerWidth)
+      );
+      const nextHeight = Math.max(
+        1,
+        Math.round(bounds.height || document.documentElement.clientHeight || window.innerHeight)
+      );
+      const nextPixelRatio = Math.min(
+        MAX_PIXEL_RATIO,
+        Math.max(1, window.devicePixelRatio || 1)
+      );
+      const dimensionsChanged = nextWidth !== width || nextHeight !== height;
+      const pixelRatioChanged = nextPixelRatio !== pixelRatio;
+
+      if (!dimensionsChanged && !pixelRatioChanged) return;
+
+      const previousWidth = width || nextWidth;
+      const previousHeight = height || nextHeight;
+      width = nextWidth;
+      height = nextHeight;
+      pixelRatio = nextPixelRatio;
+
+      // Keep drawing coordinates in CSS pixels while rendering sharply on
+      // high-density mobile screens.
+      netCanvas.width = Math.round(width * pixelRatio);
+      netCanvas.height = Math.round(height * pixelRatio);
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+
+      if (nodes.length === 0) {
+        initNodes();
+      } else {
+        // Preserve every existing node and its direction. Scaling positions
+        // prevents orientation/layout changes from looking like a new field.
+        const scaleX = width / previousWidth;
+        const scaleY = height / previousHeight;
+        nodes.forEach((node) => {
+          node.x = Math.min(width, Math.max(0, node.x * scaleX));
+          node.y = Math.min(height, Math.max(0, node.y * scaleY));
+        });
+        reconcileNodeCount();
+      }
+
+      // Resizing clears the canvas. Reset only the frame clock—not particles—
+      // so the next frame cannot catch up with one large visual jump.
+      lastFrameTime = null;
+    }
+
+    function scheduleResize() {
+      // Consume the resize at the beginning of the next animation frame. This
+      // ensures resizing cannot clear a frame after it has already been drawn.
+      resizePending = true;
     }
 
     function connectNodes() {
@@ -314,39 +403,57 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Mobile scroll detection — freezes node positions during scroll
-    // to prevent the "jump to new pattern" when the browser unfreezes
-    // the composited fixed layer after scroll momentum ends.
-    let isScrollFrozen = false;
-    let scrollTimer;
-    const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    function animate(timestamp) {
+      // Some browsers keep issuing heavily throttled frames in background
+      // tabs. Never advance the field while it cannot be seen.
+      if (document.hidden) {
+        lastFrameTime = null;
+        requestAnimationFrame(animate);
+        return;
+      }
 
-    if (hasTouchScreen) {
-      window.addEventListener('scroll', () => {
-        isScrollFrozen = true;
-        clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(() => {
-          isScrollFrozen = false;
-        }, 100);
-      }, { passive: true });
-    }
+      const currentPixelRatio = Math.min(
+        MAX_PIXEL_RATIO,
+        Math.max(1, window.devicePixelRatio || 1)
+      );
 
-    function animate() {
-      requestAnimationFrame(animate);
+      // Resize before drawing so the canvas cannot be cleared after this
+      // frame. Checking DPR here also catches zoom/display changes that do not
+      // dispatch a window resize event.
+      if (resizePending || currentPixelRatio !== pixelRatio) {
+        resizePending = false;
+        resizeCanvas();
+      }
+
+      const elapsed = lastFrameTime === null
+        ? NOMINAL_FRAME_DURATION
+        : timestamp - lastFrameTime;
+      lastFrameTime = timestamp;
+
+      // requestAnimationFrame may be throttled during mobile browser UI work.
+      // Time-based movement keeps normal low-FPS motion consistent, while the
+      // cap prevents a suspended frame from jumping to a seemingly new pattern.
+      const frameScale = Math.min(Math.max(elapsed, 0), MAX_FRAME_DELTA)
+        / NOMINAL_FRAME_DURATION;
+
       ctx.clearRect(0, 0, width, height);
-      nodes.forEach(node => {
-        if (isScrollFrozen) {
-          node.draw();   // Redraw at current position — no movement
-        } else {
-          node.update();  // Move + draw
-        }
-      });
+      nodes.forEach((node) => node.update(frameScale));
       connectNodes();
+      requestAnimationFrame(animate);
     }
 
-    window.addEventListener('resize', resize);
-    resize();
-    animate();
+    function resetFrameClock() {
+      lastFrameTime = null;
+    }
+
+    window.addEventListener('resize', scheduleResize, { passive: true });
+    window.addEventListener('pageshow', resetFrameClock);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) resetFrameClock();
+    });
+
+    resizeCanvas();
+    requestAnimationFrame(animate);
   }
 
   // ==========================================
