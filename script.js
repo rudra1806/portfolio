@@ -715,7 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (resumeBtn) {
     resumeBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      window.open('https://drive.google.com/file/d/1AX0bWETN3RqAu33STVEj-p5m8__5mokd/view?usp=sharing', '_blank');
+      window.open('https://drive.google.com/file/d/1vWnaHDsub6IaEHxmzY9GPdfsqBgWceNg/view?usp=sharing', '_blank');
     });
   }
 
